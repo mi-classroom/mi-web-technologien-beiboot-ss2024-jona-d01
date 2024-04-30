@@ -1,0 +1,17 @@
+# Operating system and IDE-specific files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Compiled files and build directories
+node_modules/
+dist/
+build/
+
+# Secret or sensitive files
+.env
+
+# Log files and temporary files
+*.log
+*.tmp
+*.bak
