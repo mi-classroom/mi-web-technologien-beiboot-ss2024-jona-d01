@@ -14,3 +14,12 @@ Hier ein paar ADR Beispiele aus dem letzten Semestern:
 - https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2022-twobiers/tree/main/adr
 
 Halten Sie die Anwendung, gerade in der Anfangsphase möglichst einfach, schlank und leichtgewichtig (KISS).
+
+
+## Projekt-Dokumentation:
+
+- [Issues & zeitaufwand](docs/issues.md)
+- [Backend](docs/decisions/backend.md)
+- [Tool zur Bildbearbeitung](docs/decisions/imageEditingTools)
+- [Tool zur Videobearbeitung](docs/decisions/videoEditingTools)
+
