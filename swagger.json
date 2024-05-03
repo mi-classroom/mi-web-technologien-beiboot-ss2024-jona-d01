@@ -1,0 +1,76 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Meine API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Begrüßungsnachricht",
+        "responses": {
+          "200": {
+            "description": "Erfolgreiche Antwort",
+            "content": {
+              "text/plain": {
+                "example": "Hello World!"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/compressedFrames": {
+      "get": {
+        "tags": [
+          "video"
+        ],
+        "summary": "Komprimiere Frames",
+        "responses": {
+          "200": {
+            "description": "Erfolgreiche Antwort",
+            "content": {
+              "text/plain": {
+                "example": "Komprimierung abgeschlossen!"
+              }
+            }
+          },
+          "500": {
+            "description": "Interner Serverfehler",
+            "content": {
+              "text/plain": {
+                "example": "Interner Serverfehler"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/extractedFrames": {
+      "get": {
+        "tags": [
+          "image"
+        ],
+        "summary": "Extrahiere Frames aus Video",
+        "responses": {
+          "200": {
+            "description": "Erfolgreiche Antwort",
+            "content": {
+              "text/plain": {
+                "example": "Konvertierung abgeschlossen!"
+              }
+            }
+          },
+          "500": {
+            "description": "Interner Serverfehler",
+            "content": {
+              "text/plain": {
+                "example": "Interner Serverfehler"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
