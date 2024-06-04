@@ -26,14 +26,13 @@ Ziel ist es, ein Tool zu finden, mit dem einzelne Bilder zusammengesetzt und bea
 
 ## Entscheidung
 
-Ich habe mich für das Tool „Sharp“ entschieden, weil es einfach zu installieren und zu verwenden ist. Zudem ist das Tool gut dokumentiert.
-
-## Erkenntnisse
+Ich habe mich für das Tool „Sharp“ entschieden, weil es einfach zu installieren und zu verwenden ist. Zudem ist das Tool gut dokumentiert und besitzt eine gute Performance.
 
 ### Vorteile
 
-- ...
+- Gute Performance
+- Kompakte und verständliche Dokumentation
 
 ### Nachteile
 
-- ...
+- beschränkte Funktionalität

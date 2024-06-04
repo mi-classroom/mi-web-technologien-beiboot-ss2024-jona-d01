@@ -15,11 +15,11 @@ Hier ein paar ADR Beispiele aus dem letzten Semestern:
 
 Halten Sie die Anwendung, gerade in der Anfangsphase möglichst einfach, schlank und leichtgewichtig (KISS).
 
-
 ## Projekt-Dokumentation:
 
 - [Issues & zeitaufwand](docs/issues.md)
 - [Backend](docs/decisions/backend.md)
-- [Tool zur Bildbearbeitung](docs/decisions/imageEditingTools)
-- [Tool zur Videobearbeitung](docs/decisions/videoEditingTools)
+- [Frontend](docs/decisions/frontend.md)
+- [Tool zur Bildbearbeitung](docs/decisions/imageEditingTools.md)
+- [Tool zur Videobearbeitung](docs/decisions/videoEditingTools.md)
 

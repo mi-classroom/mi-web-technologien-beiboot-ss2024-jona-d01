@@ -21,18 +21,18 @@ Ziel ist es, ein Tool zu finden, mit dem einzelne Bilder aus einem Video extrahi
 ## Optionen
 
 - [Ffmpeg](https://ffmpeg.org/)
-- 
+- [Handbrake](https://github.com/75lb/handbrake-js)
+- [WebCodecs API](https://developer.mozilla.org/en-US/docs/Web/API/WebCodecs_API)
 
 ## Entscheidung
 
 Ich habe mich für das Tool „Ffmpeg“ entschieden, weil es einfach zu zu verwenden ist und über viele verschiedene Optionen verfügt.
 
-## Erkenntnisse
-
 ### Vorteile
 
-- gut dokumentiert
+- ausführliche Dokumentation
+- viele Funktionen
 
 ### Nachteile
 
-- sehr komplex
+- Komplexität
