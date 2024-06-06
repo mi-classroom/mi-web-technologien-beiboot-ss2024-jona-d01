@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Ref, ref, watch } from 'vue'
+import { type Ref, ref } from 'vue'
 import Button from 'primevue/button'
 import Checkbox from '../components/Checkbox.vue'
 import axios from 'axios'
@@ -10,6 +10,7 @@ interface Image {
   name: string
   selected: boolean
   showPreviewIcon: boolean
+  showSkeleton: boolean
 }
 
 const images: Ref<Image[]> = ref([])
@@ -37,6 +38,10 @@ function imageClick(index: number) {
   displayCustom.value = true
 }
 
+function handleImageLoad(image: Image) {
+  image.showSkeleton = false
+}
+
 async function submit() {
   try {
     await axios.get('/extractedFrames')
@@ -56,7 +61,8 @@ for (const path in imageFiles) {
       source: absolutePath,
       name: imageName!,
       selected: true,
-      showPreviewIcon: false
+      showPreviewIcon: false,
+      showSkeleton: true
     }
     images.value.push(imageObject)
   }
@@ -107,6 +113,7 @@ for (const path in imageFiles) {
             :label="image.index.toString()"
           />
           <div class="relative">
+            <Skeleton v-if="image.showSkeleton" width="200px" height="112.5px" class="skeleton" />
             <img
               loading="lazy"
               :src="image.source"
@@ -116,6 +123,7 @@ for (const path in imageFiles) {
               @click="imageClick(index)"
               @mouseover="image.showPreviewIcon = true"
               @mouseleave="image.showPreviewIcon = false"
+              @load="handleImageLoad(image)"
             />
             <i v-if="image.showPreviewIcon" class="pi pi-eye preview-icon pointer-events-none" />
           </div>
@@ -160,5 +168,13 @@ for (const path in imageFiles) {
   scale: 200%;
   left: 2%;
   top: 4%;
+}
+
+.skeleton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  border-radius: 5px;
 }
 </style>
