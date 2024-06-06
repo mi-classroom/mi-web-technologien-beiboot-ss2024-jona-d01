@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { type Ref, ref } from 'vue'
+import { type Ref, ref, watch } from 'vue'
 import Button from 'primevue/button'
+import Checkbox from '../components/Checkbox.vue'
 import axios from 'axios'
 
 interface Image {
@@ -84,40 +85,41 @@ for (const path in imageFiles) {
             :alt="image.item.name"
             style="width: 100%; display: block"
           />
-          <button
-            class="index-label"
-            v-bind:class="{ 'not-selected': !image.item.selected }"
-            style="padding: 20px; font-size: 1.5rem; z-index: 2"
-            @click="image.item.selected = !image.item.selected"
-          >
-            {{ image.item.index }}
-          </button>
+          <Checkbox
+            class="checkbox-preview"
+            v-model="image.item.selected"
+            :id="image.item.name"
+            :name="image.item.name"
+            :label="image.item.index.toString()"
+          />
         </div>
       </template>
     </Galleria>
 
     <div v-if="images" class="grid justify-content-center" style="width: 100%">
-      <div v-for="(image, index) of images" :key="index" class="col-3 relative w-auto">
-        <div class="relative">
-          <img
-            loading="lazy"
-            :src="image.source"
-            :alt="image.name"
-            style="width: 200px; cursor: pointer"
-            class="preview-image"
-            @click="imageClick(index)"
-            @mouseover="image.showPreviewIcon = true"
-            @mouseleave="image.showPreviewIcon = false"
+      <div v-for="(image, index) of images" :key="index" class="col-3 relative w-auto m-1">
+        <div>
+          <Checkbox
+            class="checkbox"
+            v-model="image.selected"
+            :id="image.name"
+            :name="image.name"
+            :label="image.index.toString()"
           />
-          <i v-if="image.showPreviewIcon" class="pi pi-eye preview-icon" />
+          <div class="relative">
+            <img
+              loading="lazy"
+              :src="image.source"
+              :alt="image.name"
+              style="width: 200px; cursor: pointer"
+              class="preview-image"
+              @click="imageClick(index)"
+              @mouseover="image.showPreviewIcon = true"
+              @mouseleave="image.showPreviewIcon = false"
+            />
+            <i v-if="image.showPreviewIcon" class="pi pi-eye preview-icon pointer-events-none" />
+          </div>
         </div>
-        <button
-          v-bind:class="{ 'not-selected': !image.selected }"
-          class="index-label"
-          @click="image.selected = !image.selected"
-        >
-          {{ image.index }}
-        </button>
       </div>
     </div>
   </div>
@@ -128,28 +130,6 @@ for (const path in imageFiles) {
 </template>
 
 <style scoped>
-.index-label {
-  z-index: 1;
-  border: none;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-color: black;
-  color: white;
-  font-weight: bold;
-  padding: 10px;
-  min-width: 35px;
-  min-height: 35px;
-
-  &:hover {
-    cursor: pointer;
-  }
-}
-
-.not-selected {
-  background-color: red;
-}
-
 .preview-image {
   &:hover {
     filter: brightness(50%);
@@ -164,5 +144,21 @@ for (const path in imageFiles) {
   left: 50%;
   font-size: 1.5rem;
   transform: translate(-50%, -50%);
+}
+
+.checkbox {
+  position: absolute;
+  z-index: 1;
+  scale: 150%;
+  left: 0;
+  top: 0;
+}
+
+.checkbox-preview {
+  position: absolute;
+  z-index: 1;
+  scale: 200%;
+  left: 2%;
+  top: 4%;
 }
 </style>
