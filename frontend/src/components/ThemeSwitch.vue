@@ -38,7 +38,6 @@ function toggleTheme() {
         value="dark"
         @click="toggleTheme"
       />
-      <span class="theme__fill"></span>
       <span class="theme__icon">
         <span class="theme__icon-part"></span>
         <span class="theme__icon-part"></span>
@@ -61,18 +60,8 @@ function toggleTheme() {
   -webkit-tap-highlight-color: transparent;
 }
 
-.theme__fill,
 .theme__icon {
   transition: 0.3s;
-}
-
-.theme__fill {
-  display: block;
-  mix-blend-mode: difference;
-  position: fixed;
-  inset: 0;
-  height: 100%;
-  transform: translateX(-100%);
 }
 
 .theme__icon,
@@ -100,10 +89,6 @@ function toggleTheme() {
   left: calc(50% - 0.5em);
   width: 1em;
   height: 1em;
-  transition:
-    box-shadow var(--transDur) ease-in-out,
-    opacity var(--transDur) ease-in-out,
-    transform var(--transDur) ease-in-out;
   transform: scale(0.5);
 }
 
@@ -146,7 +131,6 @@ function toggleTheme() {
   transform: rotate(315deg) translateY(0.5em);
 }
 
-.theme__label,
 .theme__toggle,
 .theme__toggle-wrap {
   position: relative;
@@ -160,16 +144,12 @@ function toggleTheme() {
 .theme__toggle {
   background-color: hsl(48, 90%, 85%);
   border-radius: 25% / 50%;
-  box-shadow: 0 0 0 0.125em var(--primaryT);
   padding: 0.25em;
   width: 6em;
   height: 3em;
   -webkit-appearance: none;
   appearance: none;
-  transition:
-    background-color var(--transDur) ease-in-out,
-    box-shadow 0.15s ease-in-out,
-    transform var(--transDur) ease-in-out;
+  transition: box-shadow 0.15s ease-in-out;
 }
 
 .theme__toggle:before {
@@ -182,7 +162,6 @@ function toggleTheme() {
 }
 
 .theme__toggle:focus {
-  box-shadow: 0 0 0 0.125em var(--primary);
   outline: transparent;
 }
 
@@ -200,7 +179,7 @@ function toggleTheme() {
   background-color: hsl(198, 90%, 55%);
 }
 
-.theme__toggle:checked ~ .theme__fill {
+.theme__toggle:checked {
   transform: translateX(0);
 }
 
