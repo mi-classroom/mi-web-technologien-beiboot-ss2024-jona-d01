@@ -18,6 +18,7 @@ function handleInput(event: Event) {
   <div class="container">
     <label :for="props.name" class="checkbox-label">{{ props.label }}</label>
     <input
+      class="input"
       :name="props.name"
       :id="props.id"
       type="checkbox"
@@ -111,5 +112,9 @@ input[type='checkbox']:not(:checked) + label {
   color: white;
   z-index: 1;
   font-size: 80%;
+}
+
+.input {
+  border: 1px solid;
 }
 </style>

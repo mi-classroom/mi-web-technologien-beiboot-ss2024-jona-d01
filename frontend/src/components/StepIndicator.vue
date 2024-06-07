@@ -13,7 +13,16 @@ const handleSubmit = (event: any) => {
 
 <template>
   <div class="justify-content-center flex">
-    <Stepper :linear="true">
+    <Stepper
+      :linear="true"
+      :pt="{
+        nav: {
+          style: {
+            'margin-bottom': '20px'
+          }
+        }
+      }"
+    >
       <StepperPanel header="Upload">
         <template #content="{ nextCallback }">
           <div class="flex justify-content-center">
