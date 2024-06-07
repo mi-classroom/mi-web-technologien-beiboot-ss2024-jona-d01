@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Ref, ref } from 'vue'
+import { type Ref, ref, watch } from 'vue'
 import Button from 'primevue/button'
 import Checkbox from '../components/Checkbox.vue'
 import axios from 'axios'
@@ -13,6 +13,17 @@ interface Image {
   showSkeleton: boolean
 }
 
+interface SelectionOption {
+  name: string
+  value: string
+  constant: boolean
+}
+
+const options = ref([
+  { name: 'None', value: 'None', constant: false },
+  { name: 'Custom', value: 'Custom', constant: true },
+  { name: 'All', value: 'All', constant: false }
+])
 const images: Ref<Image[]> = ref([])
 const activeIndex = ref(0)
 const responsiveOptions = ref([
@@ -29,9 +40,32 @@ const responsiveOptions = ref([
     numVisible: 1
   }
 ])
+const selectedImages: Ref<SelectionOption> = ref(options.value[2])
+
 const displayCustom = ref(false)
 const imageFiles = import.meta.glob('../../../build/thumbnails/*.png')
 const emit = defineEmits(['onSubmit', 'onBack'])
+
+watch(selectedImages, () => {
+  if (selectedImages.value.name === 'None') {
+    images.value.forEach((image) => (image.selected = false))
+  } else if (selectedImages.value.name === 'All') {
+    images.value.forEach((image) => (image.selected = true))
+  }
+})
+
+watch(images.value, () => {
+  const allSelected = images.value.every((image) => image.selected)
+  const allUnselected = images.value.every((image) => !image.selected)
+
+  if (allSelected) {
+    selectedImages.value = options.value[2]
+  } else if (allUnselected) {
+    selectedImages.value = options.value[0]
+  } else {
+    selectedImages.value = options.value[1]
+  }
+})
 
 function imageClick(index: number) {
   activeIndex.value = index
@@ -133,7 +167,29 @@ for (const path in imageFiles) {
   </div>
   <div class="flex pt-4 justify-content-between">
     <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="emit('onBack')" />
-    <Button label="Next" icon="pi pi-arrow-right" iconPos="right" @click="submit" />
+    <SelectButton
+      v-model="selectedImages"
+      :options="options"
+      optionDisabled="constant"
+      optionLabel="name"
+      class="Test123"
+      :pt="{
+        button: (options: any) => ({
+          class: [
+            {
+              'p-highlight': options.state.selected
+            }
+          ]
+        })
+      }"
+    />
+    <Button
+      :disabled="selectedImages.name === 'None'"
+      label="Next"
+      icon="pi pi-arrow-right"
+      iconPos="right"
+      @click="submit"
+    />
   </div>
 </template>
 

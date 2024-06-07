@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-
 const props = defineProps({
   id: String,
   name: String,
@@ -8,7 +6,6 @@ const props = defineProps({
   label: String
 })
 
-const val = ref(props.modelValue)
 const emit = defineEmits(['update:modelValue'])
 
 function handleInput(event: Event) {

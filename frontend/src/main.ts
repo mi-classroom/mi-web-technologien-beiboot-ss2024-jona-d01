@@ -18,6 +18,7 @@ import Skeleton from 'primevue/skeleton'
 import Slider from 'primevue/slider'
 import InputNumber from 'primevue/inputnumber'
 import Galleria from 'primevue/galleria'
+import SelectButton from 'primevue/selectbutton'
 
 const app = createApp(App)
 
@@ -35,5 +36,6 @@ app.component('Skeleton', Skeleton)
 app.component('Slider', Slider)
 app.component('InputNumber', InputNumber)
 app.component('Galleria', Galleria)
+app.component('SelectButton', SelectButton)
 
 app.mount('#app')
