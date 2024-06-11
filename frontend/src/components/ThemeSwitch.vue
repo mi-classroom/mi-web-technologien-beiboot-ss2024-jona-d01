@@ -11,14 +11,10 @@ const theme = ref(lightTheme)
 
 function toggleTheme() {
   if (theme.value === lightTheme) {
-    PrimeVue.changeTheme(lightTheme, darkTheme, 'theme-link', () =>
-      console.log('Changed to dark-theme')
-    )
+    PrimeVue.changeTheme(lightTheme, darkTheme, 'theme-link')
     theme.value = darkTheme
   } else if (theme.value === darkTheme) {
-    PrimeVue.changeTheme(darkTheme, lightTheme, 'theme-link', () =>
-      console.log('Changed to light-theme')
-    )
+    PrimeVue.changeTheme(darkTheme, lightTheme, 'theme-link')
     theme.value = lightTheme
   } else {
     console.error('Error changing theme')
