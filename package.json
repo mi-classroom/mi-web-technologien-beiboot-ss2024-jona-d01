@@ -4,7 +4,11 @@
   "module": "backend/src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "npx tsx backend/src/index.ts"
+    "install": "",
+    "start": "npm run frontend-build && npm run backend-dev",
+    "backend-dev": "npx tsx backend/src/index.ts",
+    "frontend-dev": "cd frontend && npm run dev",
+    "frontend-build": "cd frontend && npm run build"
   },
   "author": "Jona Dielmann",
   "dependencies": {

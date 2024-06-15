@@ -1,25 +1,45 @@
-[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-24ddc0f5d75046c5622901739e7c5dd533143b0c8e959d652212380cedb1ea36.svg)](https://classroom.github.com/a/gQyBcnrC)
-# Web Technologien // begleitendes Projekt Sommersemester 2024
-Zum Modul Web Technologien gibt es ein begleitendes Projekt. Im Rahmen dieses Projekts werden wir von Veranstaltung zu Veranstaltung ein Projekt sukzessive weiter entwickeln und uns im Rahmen der Veranstaltung den Fortschritt anschauen, Code Reviews machen und Entwicklungsschritte vorstellen und diskutieren.
+# Frame Magic 🪄
 
-Als organisatorischen Rahmen für das Projekt nutzen wir GitHub Classroom. Inhaltlich befassen wir uns mit einer Client-Server Anwendung mit deren Hilfe [Bilder mit Langzeitbelichtung](https://de.wikipedia.org/wiki/Langzeitbelichtung) sehr einfach nachgestellt werden können.
+## Projekt – Web Technologien – Sommersemester 2024
+Dieses Projekt wird im Rahmen des Moduls „Web Technologien“ im Master-Studium der Medieninformatik an der TH-Köln im Sommersemester 2024 durchgeführt.
 
-Warum ist das cool? Bilder mit Langzeitbelichtung sind gar nicht so einfach zu erstellen, vor allem, wenn man möglichst viel Kontrolle über das Endergebnis haben möchte. In unserem Ansatz, bildet ein Film den Ausgangspunkt. Diesen zerlegen wir in Einzelbilder und montieren die Einzelbilder mit verschiedenen Blendmodes zu einem Bild mit Langzeitbelichtungseffekt zusammen.
+## Ziel
+Ziel dieses Projekts ist es, eine Client-Server-Anwendung zu entwickeln, mit der ein Bild mit [Langzeitbelichtung](https://de.wikipedia.org/wiki/Langzeitbelichtung) auf einfache Art und Weise nachgestellt bzw. generiert werden kann.
 
-Dokumentieren Sie in diesem Beibootprojekt Ihre Entscheidungen gewissenhaft unter Zuhilfenahme von [Architectual Decision Records](https://adr.github.io) (ADR).
+Warum ist das cool?\
+Bilder mit Langzeitbelichtung sind gar nicht so einfach zu erstellen, vor allem, wenn man möglichst viel Kontrolle über das Endergebnis haben möchte.\
 
-Hier ein paar ADR Beispiele aus dem letzten Semestern:
-- https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2022-Moosgloeckchen/tree/main/docs/decisions
-- https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2022-mweiershaeuser/tree/main/adr
-- https://github.com/mi-classroom/mi-web-technologien-beiboot-ss2022-twobiers/tree/main/adr
+Als Ausgangspunkt für die Erstellung des Bildes dient ein Video, welches zunächst in Einzelbilder zerlegt wird. Die einzelnen Bilder werden anschließend mit verschiedenen Blendmodes so übereinander gelegt, dass ein Bild mit Langzeitbelichtungseffekt entsteht.
 
-Halten Sie die Anwendung, gerade in der Anfangsphase möglichst einfach, schlank und leichtgewichtig (KISS).
+## Team
+Autor: [Jona Dielmann](https://github.com/jona-d01)\
+Reviewer: ???
 
-## Projekt-Dokumentation:
 
-- [Issues & zeitaufwand](docs/issues.md)
+## Dokumentation
+Die Anforderungen an dieses Projekt wurden in einzelnen Issues festgehalten und in folgender Datei dokumentiert:
+
+- [Issues & Zeitaufwand](docs/issues.md)
+
+Die Entscheidungen für die Verwendung der Technologien innerhalb dieses Projekts, sind in Form von [Architectural Decision Records (ADR's)](https://adr.github.io) unter folgenden Links einzusehen:
+
 - [Backend](docs/decisions/backend.md)
 - [Frontend](docs/decisions/frontend.md)
-- [Tool zur Bildbearbeitung](docs/decisions/imageEditingTools.md)
-- [Tool zur Videobearbeitung](docs/decisions/videoEditingTools.md)
+- [Bildbearbeitung](docs/decisions/imageEditingTools.md)
+- [Videobearbeitung](docs/decisions/videoEditingTools.md)
 
+
+## Verwendung
+> Die lokale Ausführung dieses Projekts setzt die Installation von [Node.js](https://nodejs.org/en/download/prebuilt-installer) voraus!
+
+### Installation
+```sh
+npm install
+```
+
+### Ausführung
+```sh
+npm start
+```
+
+Die Anwendung kann nach erfolgreicher Ausführung unter http://localhost:8000 im Browser aufgerufen werden.
