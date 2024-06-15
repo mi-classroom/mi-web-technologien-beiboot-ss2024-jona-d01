@@ -2,6 +2,7 @@
 .DS_Store
 Thumbs.db
 .vscode/
+.idea/
 
 # Compiled files and build directories
 node_modules/
