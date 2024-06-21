@@ -1,24 +1,18 @@
 <script setup lang="ts">
-import { usePrimeVue } from 'primevue/config'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+const isDarkTheme = ref(false)
 
-const PrimeVue = usePrimeVue()
-
-const lightTheme = 'aura-light-green'
-const darkTheme = 'aura-dark-green'
-
-const theme = ref(lightTheme)
-
-function toggleTheme() {
-  if (theme.value === lightTheme) {
-    PrimeVue.changeTheme(lightTheme, darkTheme, 'theme-link')
-    theme.value = darkTheme
-  } else if (theme.value === darkTheme) {
-    PrimeVue.changeTheme(darkTheme, lightTheme, 'theme-link')
-    theme.value = lightTheme
-  } else {
-    console.error('Error changing theme')
+onMounted(() => {
+  const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+  if (prefersDarkMode) {
+    isDarkTheme.value = true
+    document.body.classList.toggle('my-app-dark')
+    document.documentElement.classList.toggle('my-app-dark')
   }
+})
+function toggleTheme() {
+  document.body.classList.toggle('my-app-dark')
+  document.documentElement.classList.toggle('my-app-dark')
 }
 </script>
 
@@ -26,12 +20,12 @@ function toggleTheme() {
   <label for="theme" class="theme">
     <span class="theme__toggle-wrap">
       <input
+        v-model="isDarkTheme"
         id="theme"
         class="theme__toggle"
         type="checkbox"
         role="switch"
         name="theme"
-        value="dark"
         @click="toggleTheme"
       />
       <span class="theme__icon">

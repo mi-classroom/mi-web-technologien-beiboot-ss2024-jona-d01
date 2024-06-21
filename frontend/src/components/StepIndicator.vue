@@ -14,32 +14,39 @@ const handleSubmit = (event: any) => {
 <template>
   <div class="justify-content-center flex">
     <Stepper
+      value="1"
       :linear="true"
       :pt="{
-        nav: {
+        root: {
           style: {
-            'margin-bottom': '20px'
+            'margin-bottom': '20px',
+            'margin-left': '1rem',
+            'margin-right': '1rem'
           }
         }
       }"
     >
-      <StepperPanel header="Upload">
-        <template #content="{ nextCallback }">
+      <StepList>
+        <Step value="1">Upload</Step>
+        <Step value="2">Choose</Step>
+        <Step value="3">Finish</Step>
+      </StepList>
+      <StepPanels>
+        <StepPanel v-slot="{ activateCallback }" value="1">
           <div class="flex justify-content-center">
-            <FileUpload @onSubmit="nextCallback" />
+            <FileUpload @onSubmit="activateCallback('2')" />
           </div>
-        </template>
-      </StepperPanel>
-      <StepperPanel header="Choose">
-        <template #content="{ prevCallback, nextCallback }">
-          <ImageGallery @onSubmit="handleSubmit(nextCallback)" @onBack="prevCallback" />
-        </template>
-      </StepperPanel>
-      <StepperPanel header="Finish">
-        <template #content="{ prevCallback }">
-          <ImagePreview v-if="showPreview" @onBack="prevCallback" />
-        </template>
-      </StepperPanel>
+        </StepPanel>
+        <StepPanel v-slot="{ activateCallback }" value="2">
+          <ImageGallery
+            @onSubmit="handleSubmit(activateCallback('3'))"
+            @onBack="activateCallback('1')"
+          />
+        </StepPanel>
+        <StepPanel v-slot="{ activateCallback }" value="3">
+          <ImagePreview v-if="showPreview" @onBack="activateCallback('2')" />
+        </StepPanel>
+      </StepPanels>
     </Stepper>
   </div>
 </template>

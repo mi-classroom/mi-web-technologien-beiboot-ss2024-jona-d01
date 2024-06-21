@@ -116,6 +116,13 @@ for (const path in imageFiles) {
       :fullScreen="true"
       :showItemNavigators="true"
       :showThumbnails="false"
+      :pt="{
+        mask: {
+          style: {
+            background: 'rgba(0,0,0,0.9) !important'
+          }
+        }
+      }"
     >
       <template #item="image">
         <div class="relative">
@@ -170,18 +177,9 @@ for (const path in imageFiles) {
     <SelectButton
       v-model="selectedImages"
       :options="options"
+      :allowEmpty="false"
       optionDisabled="constant"
       optionLabel="name"
-      class="Test123"
-      :pt="{
-        button: (options: any) => ({
-          class: [
-            {
-              'p-highlight': options.state.selected
-            }
-          ]
-        })
-      }"
     />
     <Button
       :disabled="selectedImages.name === 'None'"

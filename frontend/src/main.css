@@ -1,8 +1,14 @@
 #app {
     display: flex;
     flex-direction: column;
+    font-family: "Inter", sans-serif;
 }
 
 body {
     margin: 0;
+}
+
+.p-togglebutton:disabled {
+    background: var(--togglebutton-background) !important;
+    border: var(--togglebutton-border-color) !important;
 }
