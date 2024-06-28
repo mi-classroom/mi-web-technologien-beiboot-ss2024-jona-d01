@@ -107,6 +107,7 @@ input[type='checkbox']:not(:checked) + label {
 }
 
 .checkbox-label {
+  font-family: 'Inter', sans-serif;
   pointer-events: none;
   position: absolute;
   color: white;
