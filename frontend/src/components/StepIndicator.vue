@@ -2,13 +2,6 @@
 import FileUpload from '@/components/FileUpload.vue'
 import ImageGallery from '@/components/ImageGallery.vue'
 import ImagePreview from '@/components/ImagePreview.vue'
-import { ref } from 'vue'
-
-const showPreview = ref(false)
-const handleSubmit = (event: any) => {
-  showPreview.value = true
-  event()
-}
 </script>
 
 <template>
@@ -38,13 +31,10 @@ const handleSubmit = (event: any) => {
           </div>
         </StepPanel>
         <StepPanel v-slot="{ activateCallback }" value="2">
-          <ImageGallery
-            @onSubmit="handleSubmit(activateCallback('3'))"
-            @onBack="activateCallback('1')"
-          />
+          <ImageGallery @onSubmit="activateCallback('3')" @onBack="activateCallback('1')" />
         </StepPanel>
         <StepPanel v-slot="{ activateCallback }" value="3">
-          <ImagePreview v-if="showPreview" @onBack="activateCallback('2')" />
+          <ImagePreview @onBack="activateCallback('2')" />
         </StepPanel>
       </StepPanels>
     </Stepper>
