@@ -38,19 +38,15 @@ const onUpload = async () => {
   }
 }
 
-const formatSize = (bytes: number) => {
-  const k = 1024
-  const dm = 3
-  const sizes = $primevue.config.locale?.fileSizeTypes || []
+function formatSize(bytes: number): string {
+  const fileSizeKB = bytes / 1000
 
-  if (bytes === 0) {
-    return `0 ${sizes[0]}`
+  if (fileSizeKB < 1000) {
+    return `${fileSizeKB.toFixed(1)} kB`
+  } else {
+    const fileSizeMB = fileSizeKB / 1000
+    return `${fileSizeMB.toFixed(1)} MB`
   }
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm))
-
-  return `${formattedSize} ${sizes[i]}`
 }
 </script>
 
@@ -66,7 +62,6 @@ const formatSize = (bytes: number) => {
       accept="video/*"
       :fileLimit="1"
       :multiple="false"
-      :maxFileSize="100000000"
       :disabled="files.length > 0"
       @select="onSelectedFiles"
       @upload="onUpload"
