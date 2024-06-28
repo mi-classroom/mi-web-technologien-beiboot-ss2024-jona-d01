@@ -1,8 +1,13 @@
-import fs from 'fs';
+import fs from 'node:fs';
 
-export async function createOutputFolderIfNeeded(outputPath: string) {
-    if (!fs.existsSync(outputPath)) {
-        fs.mkdirSync(outputPath);
-        console.log(`Ausgabeordner erstellt: ${outputPath}`);
+export async function createDirectory(path: string) {
+    try {
+        if (fs.existsSync(path)) {
+            fs.rmSync(path, { recursive: true });
+        }
+
+        fs.mkdirSync(path)
+    } catch (error) {
+        throw error
     }
 }
