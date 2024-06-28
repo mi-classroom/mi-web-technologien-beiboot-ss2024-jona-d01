@@ -1,16 +1,17 @@
 import express from 'express';
 import {extractFrames} from "./services/VideoService.ts";
 import {compressFrames} from "./services/ImageService.ts";
-import {createOutputFolderIfNeeded} from "./fileHelper.ts";
+import {createDirectory} from "./fileHelper.ts";
 import multer from 'multer';
-import e from "express";
+import fs from 'node:fs';
+import path from 'path'
 
 export const router = express.Router();
 const frameRate = 5;
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
-        await createOutputFolderIfNeeded('build/video');
+        await createDirectory('build/video');
         cb(null, 'build/video');
     },
     filename: (req, file, cb) => {
@@ -20,7 +21,6 @@ const storage = multer.diskStorage({
 const uploadVideo = multer({ storage });
 
 router.post('/upload', uploadVideo.single('video'), (req, res) => {
-    console.log(req.file);
     res.sendStatus(200);
 })
 
@@ -33,7 +33,6 @@ router.post('/convertImage', async (req, res) => {
         const selectedImageNames: string[] = images
             .filter((image: { selected: boolean; }) => image.selected)
             .map((image: { name: string; }) => image.name);
-        await createOutputFolderIfNeeded(outputPath);
         await compressFrames(inputPath, outputPath, opacity, selectedImageNames);
         res.send('Created Picture successfully.');
     } catch (error) {
@@ -49,7 +48,7 @@ router.get('/extractedFrames', async (req, res) => {
     const filePattern = '%03d'
 
     try {
-        await createOutputFolderIfNeeded(outputPath);
+        await createDirectory(outputPath);
         await extractFrames(inputPath, outputPath, frameRate, resolution, filePattern);
         res.send('Created Frames successfully.');
     } catch (error) {
@@ -58,17 +57,54 @@ router.get('/extractedFrames', async (req, res) => {
     }
 });
 
-router.get('/thumbnails', async (req, res) => {
+router.put('/thumbnails', async (req, res) => {
     const inputPath = 'build/video/video.mov';
     const outputPath = 'build/thumbnails';
     const resolution = '1280x720';
     const filePattern = '%03d'
     try {
-        await createOutputFolderIfNeeded(outputPath);
+        await createDirectory(outputPath);
         await extractFrames(inputPath, outputPath, frameRate, resolution, filePattern);
-        res.send('Created thumbnails successfully.')
+        res.sendStatus(200);
     } catch (error) {
         console.error('Error creating thumbnails:', error);
-        res.status(500).send('Internal error');
+        res.status(500).send('Internal server error');
     }
 });
+
+
+router.get('/thumbnails', async (req, res) => {
+    try {
+        fs.readdir(path.join(process.cwd(), 'build', 'thumbnails'), { withFileTypes: true },(error, files: fs.Dirent[]) => {
+            if (error) {
+                console.error('Error creating frames:', error);
+                res.status(500).send('Internal error');
+            }
+
+            const frames = files.map((file: fs.Dirent, index) => {
+                return {
+                    index: index + 1,
+                    name: file.name,
+                    source: path.join('build', 'thumbnails', file.name),
+                    selected: true,
+                    showPreviewIcon: false,
+                    showSkeleton: true
+                }
+            })
+
+            res.send(frames)
+        });
+    } catch (error) {
+        res.sendStatus(500).send('Internal server error');
+    }
+})
+
+router.get('/output', async (req, res) => {
+    try {
+        const fileBuffer = fs.readFileSync(path.join(process.cwd(), 'build', 'output.png'));
+        const base64Image = fileBuffer.toString('base64')
+        res.send(base64Image)
+    } catch (error) {
+        res.sendStatus(500).send('Internal server error');
+    }
+})

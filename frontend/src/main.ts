@@ -7,23 +7,23 @@ import 'primeicons/primeicons.css'
 import 'primeflex/primeflex.min.css'
 import Aura from '@primevue/themes/aura'
 
-import FileUpload from 'primevue/fileupload'
-import Steps from 'primevue/steps'
-import Button from 'primevue/button'
 import Badge from 'primevue/badge'
+import Button from 'primevue/button'
 import Carousel from 'primevue/carousel'
+import FileUpload from 'primevue/fileupload'
+import Galleria from 'primevue/galleria'
+import InputNumber from 'primevue/inputnumber'
+import ProgressSpinner from 'primevue/progressspinner'
+import SelectButton from 'primevue/selectbutton'
 import Skeleton from 'primevue/skeleton'
 import Slider from 'primevue/slider'
-import InputNumber from 'primevue/inputnumber'
-import Galleria from 'primevue/galleria'
-import SelectButton from 'primevue/selectbutton'
-
-import Stepper from 'primevue/stepper'
-import StepList from 'primevue/steplist'
-import StepPanels from 'primevue/steppanels'
-import StepItem from 'primevue/stepitem'
 import Step from 'primevue/step'
+import Steps from 'primevue/steps'
+import Stepper from 'primevue/stepper'
+import StepItem from 'primevue/stepitem'
+import StepList from 'primevue/steplist'
 import StepPanel from 'primevue/steppanel'
+import StepPanels from 'primevue/steppanels'
 
 const app = createApp(App)
 
@@ -39,6 +39,8 @@ app.use(PrimeVue, {
     }
   }
 })
+
+app.component('ProgressSpinner', ProgressSpinner)
 app.component('FileUpload', FileUpload)
 app.component('Steps', Steps)
 app.component('Button', Button)

@@ -12,6 +12,7 @@ app.use(express.json());
 app.use(router);
 
 app.use(express.static(path));
+app.use('/build', express.static(process.cwd() + '/build'));
 
 app.get('/', function (req,res) {
     res.sendFile(path + "index.html");

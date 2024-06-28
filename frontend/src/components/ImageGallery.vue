@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type Ref, ref, watch } from 'vue'
+import { onBeforeMount, type Ref, ref, watch } from 'vue'
 import Button from 'primevue/button'
 import Checkbox from '../components/Checkbox.vue'
 import axios from 'axios'
@@ -47,6 +47,17 @@ const selectedImages: Ref<SelectionOption> = ref(options.value[2])
 
 const emit = defineEmits(['onSubmit', 'onBack'])
 
+onBeforeMount(async () => {
+  await axios
+    .get('/thumbnails')
+    .then((result) => {
+      images.value = result.data
+    })
+    .catch((error) => {
+      console.error(error)
+    })
+})
+
 watch(selectedImages, () => {
   if (selectedImages.value.name === 'None') {
     images.value.forEach((image) => (image.selected = false))
@@ -55,18 +66,26 @@ watch(selectedImages, () => {
   }
 })
 
-watch(images.value, () => {
-  const allSelected = images.value.every((image) => image.selected)
-  const allUnselected = images.value.every((image) => !image.selected)
+watch(
+  images,
+  () => {
+    const allSelected = images.value.every((image) => image.selected)
+    const allUnselected = images.value.every((image) => !image.selected)
 
-  if (allSelected) {
-    selectedImages.value = options.value[2]
-  } else if (allUnselected) {
-    selectedImages.value = options.value[0]
-  } else {
-    selectedImages.value = options.value[1]
-  }
-})
+    if (allSelected) {
+      selectedImages.value = options.value[2]
+    } else if (allUnselected) {
+      selectedImages.value = options.value[0]
+    } else {
+      selectedImages.value = options.value[1]
+    }
+  },
+  { deep: true }
+)
+
+function handleImageLoad(image: Image) {
+  image.showSkeleton = false
+}
 
 function imageClick(index: number) {
   activeIndex.value = index
@@ -83,22 +102,6 @@ async function submit() {
   }
   isLoading.value = false
   emit('onSubmit')
-}
-
-for (const path in imageFiles) {
-  if (imageFiles.hasOwnProperty(path)) {
-    const imageName = path.split('/').pop()
-    const absolutePath = new URL(`../../../build/thumbnails/${imageName}`, import.meta.url).href
-    const imageObject: Image = {
-      index: parseInt(imageName!.split('.')[0]),
-      source: absolutePath,
-      name: imageName!,
-      selected: true,
-      showPreviewIcon: false,
-      showSkeleton: true
-    }
-    images.value.push(imageObject)
-  }
 }
 </script>
 
