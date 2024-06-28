@@ -1,14 +1,13 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { usePrimeVue } from 'primevue/config'
 import FileUpload, { type FileUploadSelectEvent } from 'primevue/fileupload'
 import Button from 'primevue/button'
 import axios from 'axios'
-
-const $primevue = usePrimeVue()
+import Overlay from '@/components/Overlay.vue'
 
 const totalSize = ref(0)
 const files = ref<File[]>([])
+const isLoading = ref(false)
 const file = ref()
 const videoUrl = ref('')
 const emit = defineEmits(['onSubmit'])
@@ -28,8 +27,11 @@ const onUpload = async () => {
   formData.append('video', file.value)
 
   try {
+    isLoading.value = true
     await axios.post('/upload', formData)
-    await axios.get('/thumbnails')
+    await axios.put('/thumbnails')
+
+    isLoading.value = false
     emit('onSubmit')
   } catch (error) {
     console.error(error)
@@ -53,6 +55,7 @@ const formatSize = (bytes: number) => {
 </script>
 
 <template>
+  <Overlay v-if="isLoading" />
   <div
     class="card px-5 mt-5 flex flex-column"
     style="max-width: 1280px; align-self: center; width: 100%"

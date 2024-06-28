@@ -11,6 +11,7 @@ onMounted(() => {
   }
 })
 function toggleTheme() {
+  isDarkTheme.value = !isDarkTheme.value
   document.body.classList.toggle('my-app-dark')
   document.documentElement.classList.toggle('my-app-dark')
 }

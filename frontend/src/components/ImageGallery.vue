@@ -3,6 +3,7 @@ import { type Ref, ref, watch } from 'vue'
 import Button from 'primevue/button'
 import Checkbox from '../components/Checkbox.vue'
 import axios from 'axios'
+import Overlay from '@/components/Overlay.vue'
 
 interface Image {
   index: number
@@ -19,13 +20,15 @@ interface SelectionOption {
   constant: boolean
 }
 
+const activeIndex = ref(0)
+const displayCustom = ref(false)
+const images: Ref<Image[]> = ref([])
+const isLoading = ref(false)
 const options = ref([
   { name: 'None', value: 'None', constant: false },
   { name: 'Custom', value: 'Custom', constant: true },
   { name: 'All', value: 'All', constant: false }
 ])
-const images: Ref<Image[]> = ref([])
-const activeIndex = ref(0)
 const responsiveOptions = ref([
   {
     breakpoint: '1024px',
@@ -42,8 +45,6 @@ const responsiveOptions = ref([
 ])
 const selectedImages: Ref<SelectionOption> = ref(options.value[2])
 
-const displayCustom = ref(false)
-const imageFiles = import.meta.glob('../../../build/thumbnails/*.png')
 const emit = defineEmits(['onSubmit', 'onBack'])
 
 watch(selectedImages, () => {
@@ -72,17 +73,15 @@ function imageClick(index: number) {
   displayCustom.value = true
 }
 
-function handleImageLoad(image: Image) {
-  image.showSkeleton = false
-}
-
 async function submit() {
+  isLoading.value = true
   try {
     await axios.get('/extractedFrames')
     await axios.post('/convertImage', { images: images.value })
   } catch (error) {
     console.error(error)
   }
+  isLoading.value = false
   emit('onSubmit')
 }
 
@@ -104,6 +103,7 @@ for (const path in imageFiles) {
 </script>
 
 <template>
+  <Overlay v-if="isLoading" />
   <div class="card flex justify-content-center">
     <Galleria
       v-model:activeIndex="activeIndex"
