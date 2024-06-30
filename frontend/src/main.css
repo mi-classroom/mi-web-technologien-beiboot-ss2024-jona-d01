@@ -12,3 +12,7 @@ body {
     background: var(--togglebutton-background) !important;
     border: var(--togglebutton-border-color) !important;
 }
+
+.p-galleria-nav-button {
+    z-index: 1;
+}

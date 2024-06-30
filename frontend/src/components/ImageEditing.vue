@@ -8,6 +8,20 @@ import type { Image } from '@shared-types'
 const activeIndex = ref(0)
 const images: Ref<Image[]> = ref([])
 const isLoading = ref(false)
+const responsiveOptions = ref([
+  {
+    breakpoint: '1280px',
+    numVisible: 5
+  },
+  {
+    breakpoint: '1000px',
+    numVisible: 3
+  },
+  {
+    breakpoint: '575px',
+    numVisible: 1
+  }
+])
 
 const emit = defineEmits(['onSubmit', 'onBack'])
 
@@ -58,6 +72,7 @@ onBeforeMount(async () => {
       :numVisible="5"
       :showItemNavigators="images.length > 1"
       :showItemNavigatorsOnHover="true"
+      :responsiveOptions="responsiveOptions"
       thumbnailsPosition="bottom"
     >
       <template #item="image">
@@ -99,11 +114,10 @@ onBeforeMount(async () => {
           <img
             :src="image.item.source"
             :alt="image.item.name"
-            style="width: 13rem; display: block; overflow: hidden"
+            style="width: 13rem; display: block; overflow: hidden; max-width: 200px"
           />
         </div>
       </template>
-      <div></div>
     </Galleria>
     <div class="flex pt-4 justify-content-between">
       <Button label="Back" severity="secondary" icon="pi pi-arrow-left" @click="back" />
@@ -115,5 +129,10 @@ onBeforeMount(async () => {
 <style scoped>
 :deep(.p-galleria-thumbnail) {
   overflow: hidden;
+  padding: 1rem;
+}
+
+:deep(.p-galleria-item) {
+  flex-direction: column;
 }
 </style>

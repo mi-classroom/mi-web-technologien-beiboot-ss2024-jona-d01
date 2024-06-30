@@ -49,7 +49,8 @@ import ImageCarousel from '@/components/ImageEditing.vue'
 </template>
 
 <style scoped>
-.p-stepper {
+:deep(.p-stepper) {
   flex-basis: 100rem;
+  width: 100%;
 }
 </style>
