@@ -3,15 +3,7 @@ import Button from 'primevue/button'
 import axios from 'axios'
 import { onBeforeMount, ref, type Ref } from 'vue'
 import Overlay from '@/components/Overlay.vue'
-
-interface Image {
-  index: number
-  source: string
-  name: string
-  selected: boolean
-  showPreviewIcon: boolean
-  showSkeleton: boolean
-}
+import type { Image } from '@shared-types'
 
 const activeIndex = ref(0)
 const images: Ref<Image[]> = ref([])

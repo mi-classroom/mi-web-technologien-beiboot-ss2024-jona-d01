@@ -4,15 +4,7 @@ import Button from 'primevue/button'
 import Checkbox from '../components/Checkbox.vue'
 import axios from 'axios'
 import Overlay from '@/components/Overlay.vue'
-
-interface Image {
-  index: number
-  source: string
-  name: string
-  selected: boolean
-  showPreviewIcon: boolean
-  showSkeleton: boolean
-}
+import type { Image } from '@shared-types'
 
 interface SelectionOption {
   name: string
