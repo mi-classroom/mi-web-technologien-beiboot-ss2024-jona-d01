@@ -25,17 +25,16 @@ const onSelectedFiles = (event: FileUploadSelectEvent) => {
 const onUpload = async () => {
   const formData = new FormData()
   formData.append('video', file.value)
-
+  isLoading.value = true
   try {
-    isLoading.value = true
     await axios.post('/upload', formData)
-    await axios.put('/thumbnails')
-
-    isLoading.value = false
+    await axios.post('/thumbnails')
+    await axios.post('/frames')
     emit('onSubmit')
   } catch (error) {
     console.error(error)
   }
+  isLoading.value = false
 }
 
 function formatSize(bytes: number): string {

@@ -95,13 +95,12 @@ function imageClick(index: number) {
 async function submit() {
   isLoading.value = true
   try {
-    await axios.get('/extractedFrames')
-    await axios.post('/convertImage', { images: images.value })
+    await axios.put('/filterImages', { images: images.value })
+    emit('onSubmit')
   } catch (error) {
     console.error(error)
   }
   isLoading.value = false
-  emit('onSubmit')
 }
 </script>
 

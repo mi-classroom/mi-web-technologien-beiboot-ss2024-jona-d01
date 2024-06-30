@@ -1,7 +1,7 @@
 import express from 'express';
 import {extractFrames} from "./services/VideoService.ts";
 import {compressFrames} from "./services/ImageService.ts";
-import {createDirectory} from "./fileHelper.ts";
+import { createDirectory, deleteFiles } from './fileHelper.ts'
 import multer from 'multer';
 import fs from 'node:fs';
 import path from 'path'
@@ -11,6 +11,7 @@ const frameRate = 5;
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
+        await createDirectory('build');
         await createDirectory('build/video');
         cb(null, 'build/video');
     },
@@ -24,24 +25,7 @@ router.post('/upload', uploadVideo.single('video'), (req, res) => {
     res.sendStatus(200);
 })
 
-router.post('/convertImage', async (req, res) => {
-    const inputPath = 'build/frames';
-    const outputPath = 'build';
-    const opacity = 0.05;
-    try {
-        const images = req.body.images;
-        const selectedImageNames: string[] = images
-            .filter((image: { selected: boolean; }) => image.selected)
-            .map((image: { name: string; }) => image.name);
-        await compressFrames(inputPath, outputPath, opacity, selectedImageNames);
-        res.send('Created Picture successfully.');
-    } catch (error) {
-        console.error('Error creating picture:', error);
-        res.status(500).send('Internal error');
-    }
-});
-
-router.get('/extractedFrames', async (req, res) => {
+router.post('/frames', async (req, res) => {
     const inputPath = 'build/video/video.mov';
     const outputPath = 'build/frames';
     const resolution = '1920x1080';
@@ -53,11 +37,11 @@ router.get('/extractedFrames', async (req, res) => {
         res.send('Created Frames successfully.');
     } catch (error) {
         console.error('Error creating frames:', error);
-        res.status(500).send('Internal error');
+        res.status(500).send('Internal server error');
     }
 });
 
-router.put('/thumbnails', async (req, res) => {
+router.post('/thumbnails', async (req, res) => {
     const inputPath = 'build/video/video.mov';
     const outputPath = 'build/thumbnails';
     const resolution = '1280x720';
@@ -98,6 +82,34 @@ router.get('/thumbnails', async (req, res) => {
         res.sendStatus(500).send('Internal server error');
     }
 })
+
+router.put('/filterImages', async (req, res) => {
+    try {
+        const images = req.body.images;
+        const nonSelectedImageNames: string[] = images
+          .filter((image: { selected: boolean; }) => !image.selected)
+          .map((image: { name: string; }) => image.name);
+        await deleteFiles(path.join(process.cwd(), 'build', 'thumbnails'), nonSelectedImageNames);
+        await deleteFiles(path.join(process.cwd(), 'build', 'frames'), nonSelectedImageNames);
+        res.send('Filtered images successfully.');
+    } catch (error) {
+        console.error('Error filtering images:', error);
+        res.status(500).send('Internal server error');
+    }
+})
+
+router.post('/output', async (req, res) => {
+    const inputPath = 'build/frames';
+    const outputPath = 'build';
+    try {
+        const images = req.body.images;
+        await compressFrames(inputPath, outputPath);
+        res.send('Created Picture successfully.');
+    } catch (error) {
+        console.error('Error creating picture:', error);
+        res.status(500).send('Internal error');
+    }
+});
 
 router.get('/output', async (req, res) => {
     try {
