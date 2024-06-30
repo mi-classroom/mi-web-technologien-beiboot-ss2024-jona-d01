@@ -2,6 +2,7 @@
 import FileUpload from '@/components/FileUpload.vue'
 import ImageGallery from '@/components/ImageGallery.vue'
 import ImagePreview from '@/components/ImagePreview.vue'
+import ImageCarousel from '@/components/ImageEditing.vue'
 </script>
 
 <template>
@@ -22,7 +23,8 @@ import ImagePreview from '@/components/ImagePreview.vue'
       <StepList>
         <Step value="1">Upload</Step>
         <Step value="2">Choose</Step>
-        <Step value="3">Finish</Step>
+        <Step value="3">Edit</Step>
+        <Step value="4">Finish</Step>
       </StepList>
       <StepPanels>
         <StepPanel v-slot="{ activateCallback }" value="1">
@@ -34,7 +36,12 @@ import ImagePreview from '@/components/ImagePreview.vue'
           <ImageGallery @onSubmit="activateCallback('3')" @onBack="activateCallback('1')" />
         </StepPanel>
         <StepPanel v-slot="{ activateCallback }" value="3">
-          <ImagePreview @onBack="activateCallback('2')" />
+          <div class="flex justify-content-center">
+            <ImageCarousel @onSubmit="activateCallback('4')" @onBack="activateCallback('2')" />
+          </div>
+        </StepPanel>
+        <StepPanel v-slot="{ activateCallback }" value="4">
+          <ImagePreview @onBack="activateCallback('3')" />
         </StepPanel>
       </StepPanels>
     </Stepper>
