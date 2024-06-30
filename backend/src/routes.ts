@@ -5,6 +5,7 @@ import { createDirectory, deleteFiles } from './fileHelper.ts'
 import multer from 'multer';
 import fs from 'node:fs';
 import path from 'path'
+import type { Image } from '@shared-types'
 
 export const router = express.Router();
 const frameRate = 5;
@@ -61,18 +62,19 @@ router.get('/thumbnails', async (req, res) => {
     try {
         fs.readdir(path.join(process.cwd(), 'build', 'thumbnails'), { withFileTypes: true },(error, files: fs.Dirent[]) => {
             if (error) {
-                console.error('Error creating frames:', error);
+                console.error('Error reading directory', error);
                 res.status(500).send('Internal error');
             }
 
-            const frames = files.map((file: fs.Dirent, index) => {
+            const frames: Image[] = files.map((file: fs.Dirent, index: number): Image => {
                 return {
                     index: index + 1,
                     name: file.name,
                     source: path.join('build', 'thumbnails', file.name),
                     selected: true,
                     showPreviewIcon: false,
-                    showSkeleton: true
+                    showSkeleton: true,
+                    opacity: 5
                 }
             })
 
@@ -85,12 +87,10 @@ router.get('/thumbnails', async (req, res) => {
 
 router.put('/filterImages', async (req, res) => {
     try {
-        const images = req.body.images;
-        const nonSelectedImageNames: string[] = images
-          .filter((image: { selected: boolean; }) => !image.selected)
-          .map((image: { name: string; }) => image.name);
-        await deleteFiles(path.join(process.cwd(), 'build', 'thumbnails'), nonSelectedImageNames);
-        await deleteFiles(path.join(process.cwd(), 'build', 'frames'), nonSelectedImageNames);
+        const images: Image[] = req.body.images;
+        const nonSelectedImages: Image[] = images.filter(image => !image.selected);
+        await deleteFiles(path.join(process.cwd(), 'build', 'thumbnails'), nonSelectedImages);
+        await deleteFiles(path.join(process.cwd(), 'build', 'frames'), nonSelectedImages);
         res.send('Filtered images successfully.');
     } catch (error) {
         console.error('Error filtering images:', error);
@@ -102,11 +102,11 @@ router.post('/output', async (req, res) => {
     const inputPath = 'build/frames';
     const outputPath = 'build';
     try {
-        const images = req.body.images;
-        await compressFrames(inputPath, outputPath);
+        const images: Image[] = req.body.images;
+        await compressFrames(inputPath, outputPath, images);
         res.send('Created Picture successfully.');
     } catch (error) {
-        console.error('Error creating picture:', error);
+        console.error('Error creating output:', error);
         res.status(500).send('Internal error');
     }
 });

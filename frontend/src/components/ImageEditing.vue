@@ -61,7 +61,38 @@ onBeforeMount(async () => {
       thumbnailsPosition="bottom"
     >
       <template #item="image">
-        <img :src="image.item.source" :alt="image.item.name" style="width: 100%; display: block" />
+        <img
+          :src="image.item.source"
+          :alt="image.item.name"
+          :style="{
+            width: '100%',
+            maxWidth: '1280px',
+            display: 'block',
+            opacity: `${image.item.opacity}%`
+          }"
+        />
+        <div class="flex w-full p-5">
+          <div class="flex-auto">
+            <label for="opacity" class="font-bold block mb-2">Opacity</label>
+            <InputNumber
+              v-model="image.item.opacity"
+              inputId="opacity"
+              :showButtons="true"
+              buttonLayout="horizontal"
+              style="width: 4rem"
+              :min="0"
+              :max="100"
+              suffix=" %"
+            >
+              <template #incrementbuttonicon>
+                <span class="pi pi-plus" />
+              </template>
+              <template #decrementbuttonicon>
+                <span class="pi pi-minus" />
+              </template>
+            </InputNumber>
+          </div>
+        </div>
       </template>
       <template #thumbnail="image">
         <div class="grid justify-content-center">

@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import e from 'express'
+import { Image } from '@shared-types'
 
 export async function createDirectory(path: string): Promise<void> {
     try {
@@ -13,14 +13,14 @@ export async function createDirectory(path: string): Promise<void> {
     }
 }
 
-export async function deleteFiles(path: string, fileNames: string[]): Promise<void> {
+export async function deleteFiles(path: string, Images: Image[]): Promise<void> {
     try {
-        for (const fileName of fileNames) {
-            const filePath = `${path}/${fileName}`;
+        for (const image of Images) {
+            const filePath = `${path}/${image.name}`;
             if (fs.existsSync(filePath)) {
                 fs.unlinkSync(filePath);
             } else {
-                console.log(`File ${fileName} not found.`);
+                console.log(`File ${image.name} not found.`);
             }
         }
     } catch (error) {
