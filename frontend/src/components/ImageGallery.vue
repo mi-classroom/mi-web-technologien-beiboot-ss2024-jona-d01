@@ -4,15 +4,7 @@ import Button from 'primevue/button'
 import Checkbox from '../components/Checkbox.vue'
 import axios from 'axios'
 import Overlay from '@/components/Overlay.vue'
-
-interface Image {
-  index: number
-  source: string
-  name: string
-  selected: boolean
-  showPreviewIcon: boolean
-  showSkeleton: boolean
-}
+import type { Image } from '@shared-types'
 
 interface SelectionOption {
   name: string
@@ -95,13 +87,12 @@ function imageClick(index: number) {
 async function submit() {
   isLoading.value = true
   try {
-    await axios.get('/extractedFrames')
-    await axios.post('/convertImage', { images: images.value })
+    await axios.put('/filterImages', { images: images.value })
+    emit('onSubmit')
   } catch (error) {
     console.error(error)
   }
   isLoading.value = false
-  emit('onSubmit')
 }
 </script>
 

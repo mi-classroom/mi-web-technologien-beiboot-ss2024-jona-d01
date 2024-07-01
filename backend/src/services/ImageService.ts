@@ -1,28 +1,39 @@
-import fs from "fs";
-import sharp from "sharp";
-import path from "path";
+import fs from 'fs'
+import sharp, { OverlayOptions } from 'sharp'
+import path from 'path'
+import { Image } from '@shared-types'
 
-export async function compressFrames(inputPath: string, outputPath: string, opacity: number, selectedImageNames: string[]) {
-    try {
-        const files = await fs.promises.readdir(inputPath);
-        const imageFiles = files.filter(file => file.endsWith('.png'));
-        const selectedFiles = imageFiles.filter(file => selectedImageNames.includes(file));
+export async function compressFrames(inputPath: string, outputPath: string, images: Image[]) {
+  try {
+    const files = await fs.promises.readdir(inputPath, { withFileTypes: true })
 
-        const compositeImages = await Promise.all(
-            selectedFiles.map(async file => {
-                const imageBuffer = await sharp(path.join(inputPath, file))
-                    .ensureAlpha(opacity)
-                    .toBuffer();
-                return { input: imageBuffer };
-            })
-        );
+    const compositeImages: OverlayOptions[] = await Promise.all(
+      files.map(async file => {
+        const image = images.find((image: Image) => image.name === file.name)
+        const imagePath = path.join(inputPath, file.name)
+        try {
+          const imageBuffer = await sharp(imagePath)
+            .ensureAlpha(image?.opacity ? (image.opacity / 100) : 0)
+            .toBuffer()
+          return { input: imageBuffer }
+        } catch (error) {
+          console.error('Error caused by sharp', error)
+          throw error
+        }
+      })
+    )
 
-        const sourceImage = await sharp(`build/frames/${selectedFiles[0]}`).ensureAlpha(0.1).toBuffer();
-        await sharp(sourceImage).composite(compositeImages).toFile(`${outputPath}/output.png`);
+    const sourceImage = await sharp(`${inputPath}/${images[0].name}`)
+      .ensureAlpha(images[0].opacity ? (images[0].opacity / 100) : 0)
+      .toBuffer()
 
-        console.log('Created image: output.png');
-    } catch (error) {
-        console.error('Internal error:', error);
-        throw error;
-    }
+    await sharp(sourceImage)
+      .composite(compositeImages)
+      .toFile(`${outputPath}/output.png`)
+
+    console.log('Created image: output.png')
+  } catch (error) {
+    console.error('Internal error:', error)
+    throw error
+  }
 }
