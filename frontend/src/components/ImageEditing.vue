@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
 import axios from 'axios'
-import { onBeforeMount, ref, type Ref } from 'vue'
+import { onBeforeMount, ref, type Ref, watch } from 'vue'
 import Overlay from '@/components/Overlay.vue'
 import type { Image } from '@shared-types'
+import type { InputNumberInputEvent } from 'primevue/inputnumber'
 
 const activeIndex = ref(0)
 const images: Ref<Image[]> = ref([])
 const isLoading = ref(false)
+const isSync = ref(false)
+const isPreviewEnabled = ref(true)
 const responsiveOptions = ref([
   {
     breakpoint: '1280px',
@@ -48,6 +51,15 @@ async function back() {
   isLoading.value = false
 }
 
+function handleOpacityChange(event: InputNumberInputEvent) {
+  if (isSync.value) {
+    const newValue: number = Number(event.value) || 0
+    images.value.forEach((image: Image) => {
+      image.opacity = newValue
+    })
+  }
+}
+
 onBeforeMount(async () => {
   await axios
     .get('/thumbnails')
@@ -79,25 +91,21 @@ onBeforeMount(async () => {
         <img
           :src="image.item.source"
           :alt="image.item.name"
-          :style="{
-            width: '100%',
-            maxWidth: '1280px',
-            display: 'block',
-            opacity: `${image.item.opacity}%`
-          }"
+          class="block w-full max-w-80rem"
+          :style="isPreviewEnabled ? { opacity: `${image.item.opacity}%` } : {}"
         />
-        <div class="flex w-full p-5">
-          <div class="flex-auto">
+        <div class="w-full p-5 filters">
+          <div class="flex-auto w-fit">
             <label for="opacity" class="font-bold block mb-2">Opacity</label>
             <InputNumber
               v-model="image.item.opacity"
               inputId="opacity"
               :showButtons="true"
               buttonLayout="horizontal"
-              style="width: 4rem"
               :min="0"
               :max="100"
               suffix=" %"
+              @input="handleOpacityChange"
             >
               <template #incrementbuttonicon>
                 <span class="pi pi-plus" />
@@ -106,6 +114,14 @@ onBeforeMount(async () => {
                 <span class="pi pi-minus" />
               </template>
             </InputNumber>
+          </div>
+          <div class="flex-auto w-fit">
+            <label for="switch" class="font-bold block mb-2">Preview</label>
+            <ToggleSwitch v-model="isPreviewEnabled" inputId="switch" />
+          </div>
+          <div class="flex-auto w-fit">
+            <label for="toggle" class="font-bold block mb-2">Adjust for all</label>
+            <ToggleButton v-model="isSync" id="toggle" onLabel="Yes" offLabel="No" />
           </div>
         </div>
       </template>
@@ -134,5 +150,18 @@ onBeforeMount(async () => {
 
 :deep(.p-galleria-item) {
   flex-direction: column;
+}
+
+:deep(.p-inputnumber-input) {
+  width: 4.5rem;
+  text-align: center;
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-items: center;
+  border-bottom: var(--galleria-border-width) solid var(--galleria-border-color);
+  border-top: var(--galleria-border-width) solid var(--galleria-border-color);
 }
 </style>
