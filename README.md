@@ -30,15 +30,28 @@ Die Entscheidungen für die Verwendung der Technologien innerhalb dieses Projekt
 
 
 ## Verwendung
-> Die lokale Ausführung dieses Projekts setzt die Installation von [Node.js](https://nodejs.org/en/download/prebuilt-installer) voraus!
+> Die lokale Ausführung dieses Projekts setzt die Installation von [Node.js](https://nodejs.org/en/download/prebuilt-installer) oder [Docker](https://www.docker.com/) voraus!
+### Docker:
 
-### Installation
-```sh
+#### Installation
+```shell
+ docker build -t frame-magic .
+```
+
+#### Ausführung
+```shell
+docker run --name frame-magic -p 8000:8000 -d frame-magic
+```
+
+### Node.js:
+
+#### Installation
+```shell
 npm install
 ```
 
-### Ausführung
-```sh
+#### Ausführung
+```shell
 npm start
 ```
 
