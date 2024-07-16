@@ -13,7 +13,7 @@ Als Ausgangspunkt für die Erstellung des Bildes dient ein Video, welches zunäc
 
 ## Team
 Autor: [Jona Dielmann](https://github.com/jona-d01)\
-Reviewer: ???
+Reviewer: [Lioba Brandhoff](https://github.com/Liobabrandhoff)
 
 
 ## Dokumentation
