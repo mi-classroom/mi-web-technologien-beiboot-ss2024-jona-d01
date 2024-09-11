@@ -4,14 +4,16 @@ import FileUpload, { type FileUploadSelectEvent } from 'primevue/fileupload'
 import Button from 'primevue/button'
 import axios from 'axios'
 import Overlay from '@/components/Overlay.vue'
+import { useFrameRate } from '@/composables/useFrameRate'
 
+const { frameRate, setFrameRate } = useFrameRate()
 const totalSize = ref(0)
 const files = ref<File[]>([])
 const isLoading = ref(false)
 const file = ref()
 const videoUrl = ref('')
-const emit = defineEmits(['onSubmit'])
 const isSubmitDisabled = ref(true)
+const emit = defineEmits(['onSubmit'])
 
 const onSelectedFiles = (event: FileUploadSelectEvent) => {
   file.value = event.files[0]
@@ -28,8 +30,8 @@ const onUpload = async () => {
   isLoading.value = true
   try {
     await axios.post('/upload', formData)
-    await axios.post('/thumbnails')
-    await axios.post('/frames')
+    await axios.post('/thumbnails', { frameRate: frameRate.value })
+    await axios.post('/frames', { frameRate: frameRate.value })
     emit('onSubmit')
   } catch (error) {
     console.error(error)
@@ -111,6 +113,30 @@ function formatSize(bytes: number): string {
               </div>
             </div>
           </div>
+          <div class="w-full p-5 options">
+            <div class="flex-auto w-fit">
+              <label for="fps" class="font-bold block mb-2">Frames per second</label>
+              <InputNumber
+                v-model="frameRate"
+                id="fps"
+                inputId="integeronly"
+                fluid
+                :showButtons="true"
+                buttonLayout="horizontal"
+                :min="1"
+                :max="60"
+                class="w-fit"
+                @input="setFrameRate($event.value)"
+              >
+                <template #incrementbuttonicon>
+                  <span class="pi pi-plus" />
+                </template>
+                <template #decrementbuttonicon>
+                  <span class="pi pi-minus" />
+                </template>
+              </InputNumber>
+            </div>
+          </div>
         </div>
       </template>
       <template #empty>
@@ -135,4 +161,15 @@ function formatSize(bytes: number): string {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.options {
+  display: grid;
+  grid-template-columns: auto;
+  justify-items: center;
+}
+
+:deep(.p-inputnumber-input) {
+  width: 4rem;
+  text-align: center;
+}
+</style>

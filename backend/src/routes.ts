@@ -8,7 +8,6 @@ import path from 'path'
 import type { Image } from '@shared-types'
 
 export const router = express.Router();
-const frameRate = 5;
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
@@ -31,6 +30,11 @@ router.post('/frames', async (req, res) => {
     const outputPath = 'build/frames';
     const resolution = '1920x1080';
     const filePattern = '%03d'
+    const { frameRate } = req.body;
+
+    if (!frameRate || isNaN(frameRate) || frameRate < 1 || frameRate > 60) {
+        return res.status(400).send('FrameRate is required and must be a number between 1 and 60!')
+    }
 
     try {
         await createDirectory(outputPath);
@@ -47,6 +51,12 @@ router.post('/thumbnails', async (req, res) => {
     const outputPath = 'build/thumbnails';
     const resolution = '1280x720';
     const filePattern = '%03d'
+    const { frameRate } = req.body;
+
+    if (!frameRate || isNaN(frameRate) || frameRate < 1 || frameRate > 60) {
+        return res.status(400).send('FrameRate is required and must be a number between 1 and 60!')
+    }
+
     try {
         await createDirectory(outputPath);
         await extractFrames(inputPath, outputPath, frameRate, resolution, filePattern);

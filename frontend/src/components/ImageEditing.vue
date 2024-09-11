@@ -5,7 +5,9 @@ import { onBeforeMount, ref, type Ref, watch } from 'vue'
 import Overlay from '@/components/Overlay.vue'
 import type { Image } from '@shared-types'
 import type { InputNumberInputEvent } from 'primevue/inputnumber'
+import { useFrameRate } from '@/composables/useFrameRate'
 
+const { frameRate } = useFrameRate()
 const activeIndex = ref(0)
 const images: Ref<Image[]> = ref([])
 const isLoading = ref(false)
@@ -42,8 +44,8 @@ async function submit() {
 async function back() {
   isLoading.value = true
   try {
-    await axios.post('/frames')
-    await axios.post('/thumbnails')
+    await axios.post('/frames', { frameRate: frameRate.value })
+    await axios.post('/thumbnails', { frameRate: frameRate.value })
     emit('onBack')
   } catch (error) {
     console.error(error)
