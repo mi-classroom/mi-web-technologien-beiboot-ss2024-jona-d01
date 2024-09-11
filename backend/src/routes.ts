@@ -28,12 +28,15 @@ router.post('/upload', uploadVideo.single('video'), (req, res) => {
 router.post('/frames', async (req, res) => {
     const inputPath = 'build/video/video.mov';
     const outputPath = 'build/frames';
-    const resolution = '1920x1080';
     const filePattern = '%03d'
-    const { frameRate } = req.body;
+    const { frameRate, resolution } = req.body;
 
     if (!frameRate || isNaN(frameRate) || frameRate < 1 || frameRate > 60) {
         return res.status(400).send('FrameRate is required and must be a number between 1 and 60!')
+    }
+
+    if (!resolution) {
+        return res.status(400).send('Resolution is required!')
     }
 
     try {

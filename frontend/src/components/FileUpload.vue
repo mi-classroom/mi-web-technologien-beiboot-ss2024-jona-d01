@@ -5,8 +5,10 @@ import Button from 'primevue/button'
 import axios from 'axios'
 import Overlay from '@/components/Overlay.vue'
 import { useFrameRate } from '@/composables/useFrameRate'
+import { useResolution } from '@/composables/useResolution'
 
 const { frameRate, setFrameRate } = useFrameRate()
+const { resolution, resolutionOptions, setResolution } = useResolution()
 const totalSize = ref(0)
 const files = ref<File[]>([])
 const isLoading = ref(false)
@@ -31,7 +33,7 @@ const onUpload = async () => {
   try {
     await axios.post('/upload', formData)
     await axios.post('/thumbnails', { frameRate: frameRate.value })
-    await axios.post('/frames', { frameRate: frameRate.value })
+    await axios.post('/frames', { frameRate: frameRate.value, resolution: resolution.value.value })
     emit('onSubmit')
   } catch (error) {
     console.error(error)
@@ -113,8 +115,8 @@ function formatSize(bytes: number): string {
               </div>
             </div>
           </div>
-          <div class="w-full p-5 options">
-            <div class="flex-auto w-fit">
+          <div class="w-full p-5 flex flex-wrap gap-5 justify-content-around">
+            <div class="flex flex-column w-fit">
               <label for="fps" class="font-bold block mb-2">Frames per second</label>
               <InputNumber
                 v-model="frameRate"
@@ -122,6 +124,7 @@ function formatSize(bytes: number): string {
                 inputId="integeronly"
                 fluid
                 :showButtons="true"
+                :allowEmpty="false"
                 buttonLayout="horizontal"
                 :min="1"
                 :max="60"
@@ -135,6 +138,17 @@ function formatSize(bytes: number): string {
                   <span class="pi pi-minus" />
                 </template>
               </InputNumber>
+            </div>
+            <div class="flex flex-column w-fit">
+              <label for="resolution" class="font-bold block mb-2">Resolution</label>
+              <Select
+                id="resolution"
+                v-model="resolution"
+                :options="resolutionOptions"
+                optionLabel="name"
+                class="w-14rem md:w-56"
+                @change="setResolution($event.value)"
+              />
             </div>
           </div>
         </div>
@@ -162,12 +176,6 @@ function formatSize(bytes: number): string {
 </template>
 
 <style scoped>
-.options {
-  display: grid;
-  grid-template-columns: auto;
-  justify-items: center;
-}
-
 :deep(.p-inputnumber-input) {
   width: 4rem;
   text-align: center;

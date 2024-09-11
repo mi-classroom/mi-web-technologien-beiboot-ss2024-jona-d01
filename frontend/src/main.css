@@ -1,12 +1,12 @@
 #app {
     display: flex;
     flex-direction: column;
-    font-family: "Inter", sans-serif;
     overflow: hidden;
 }
 
 body {
     margin: 0;
+    font-family: "Inter", sans-serif !important;
 }
 
 .p-togglebutton:disabled {
@@ -16,4 +16,8 @@ body {
 
 .p-galleria-nav-button {
     z-index: 1;
+}
+
+.p-select-option {
+    justify-content: flex-end !important;
 }
