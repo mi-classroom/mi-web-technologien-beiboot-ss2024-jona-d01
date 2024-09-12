@@ -1,5 +1,5 @@
 import express from 'express';
-import {extractFrames} from "./services/VideoService.ts";
+import { extractFrames, trimVideo } from './services/VideoService.ts'
 import {compressFrames} from "./services/ImageService.ts";
 import { createDirectory, deleteFiles } from './fileHelper.ts'
 import multer from 'multer';
@@ -70,7 +70,6 @@ router.post('/thumbnails', async (req, res) => {
     }
 });
 
-
 router.get('/thumbnails', async (req, res) => {
     try {
         fs.readdir(path.join(process.cwd(), 'build', 'thumbnails'), { withFileTypes: true },(error, files: fs.Dirent[]) => {
@@ -133,3 +132,27 @@ router.get('/output', async (req, res) => {
         res.sendStatus(500).send('Internal server error');
     }
 })
+
+router.post('/trimVideo', async (req, res) => {
+    const inputPath = 'build/video/video.mov';
+    const tempOutputPath = 'build/video/trimmed_video.mov';
+    const { startTime, endTime } = req.body;
+
+    if (typeof startTime !== 'number' || typeof endTime !== 'number' || startTime >= endTime) {
+        return res.status(400).send('Invalid startTime or endTime');
+    }
+
+    try {
+        await trimVideo(inputPath, tempOutputPath, startTime, endTime);
+        fs.rename(tempOutputPath, inputPath, (err) => {
+            if (err) {
+                console.error('Error renaming file:', err);
+                return res.status(500).send('Internal server error');
+            }
+            res.send('Video trimmed successfully.');
+        });
+    } catch (error) {
+        console.error('Error trimming video:', error);
+        res.status(500).send('Internal server error');
+    }
+});
