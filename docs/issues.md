@@ -7,3 +7,4 @@
 | #2 | [Bildauswahl ermöglichen](https://github.com/mi-classroom/mi-master-wt-beiboot-2024/issues/2)           | ~ 16 Std.   |
 | #3 | [Schlüsselbilder auswählen](https://github.com/mi-classroom/mi-master-wt-beiboot-2024/issues/3)         | ~ 8 Std.    |
 | #4 | [Review Process einrichten](https://github.com/mi-classroom/mi-master-wt-beiboot-2024/issues/4)         | ~ 5 Std.    |
+| #5 | [Eigenes Feature](https://github.com/mi-classroom/mi-master-wt-beiboot-2024/issues/5)                   | ~ 6 Std.    |

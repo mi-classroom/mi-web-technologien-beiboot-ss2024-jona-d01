@@ -4,14 +4,22 @@ import FileUpload, { type FileUploadSelectEvent } from 'primevue/fileupload'
 import Button from 'primevue/button'
 import axios from 'axios'
 import Overlay from '@/components/Overlay.vue'
+import { useFrameRate } from '@/composables/useFrameRate'
+import { useResolution } from '@/composables/useResolution'
+import TrimSlider from '@/components/TrimSlider.vue'
 
+const { frameRate, setFrameRate } = useFrameRate()
+const { resolution, resolutionOptions, setResolution } = useResolution()
 const totalSize = ref(0)
 const files = ref<File[]>([])
 const isLoading = ref(false)
 const file = ref()
 const videoUrl = ref('')
-const emit = defineEmits(['onSubmit'])
+const videoDuration = ref<number>(0)
+const videoResolution = ref<{ width: number; height: number }>()
+const timeRange = ref<[number, number]>([0, 0])
 const isSubmitDisabled = ref(true)
+const emit = defineEmits(['onSubmit'])
 
 const onSelectedFiles = (event: FileUploadSelectEvent) => {
   file.value = event.files[0]
@@ -20,6 +28,8 @@ const onSelectedFiles = (event: FileUploadSelectEvent) => {
     totalSize.value += parseInt(formatSize(file.size))
   })
   isSubmitDisabled.value = false
+  videoResolution.value = undefined
+  videoDuration.value = 0
 }
 
 const onUpload = async () => {
@@ -28,13 +38,21 @@ const onUpload = async () => {
   isLoading.value = true
   try {
     await axios.post('/upload', formData)
-    await axios.post('/thumbnails')
-    await axios.post('/frames')
+    await axios.post('/trimVideo', { startTime: timeRange.value[0], endTime: timeRange.value[1] })
+    await axios.post('/thumbnails', { frameRate: frameRate.value })
+    await axios.post('/frames', { frameRate: frameRate.value, resolution: resolution.value.value })
     emit('onSubmit')
   } catch (error) {
     console.error(error)
   }
   isLoading.value = false
+}
+
+const onVideoLoadedMetadata = (e: Event) => {
+  const videoElement = e.target as HTMLVideoElement
+  videoResolution.value = { width: videoElement.videoWidth, height: videoElement.videoHeight }
+  videoDuration.value = Math.floor(videoElement.duration)
+  timeRange.value = [0, videoDuration.value]
 }
 
 function formatSize(bytes: number): string {
@@ -78,6 +96,7 @@ function formatSize(bytes: number): string {
             />
             <div v-if="files.length > 0" class="flex flex-column align-items-center">
               <span class="font-semibold">{{ files[0].name }}</span>
+              <div>{{ videoResolution?.width }} x {{ videoResolution?.height }}</div>
               <div>{{ formatSize(files[0].size) }}</div>
             </div>
             <Button
@@ -105,12 +124,55 @@ function formatSize(bytes: number): string {
               class="card flex flex-column align-items-center gap-3 w-full"
             >
               <div>
-                <video controls preload="auto" width="100%" height="100%">
+                <video
+                  controls
+                  preload="auto"
+                  width="100%"
+                  height="100%"
+                  @loadedmetadata="onVideoLoadedMetadata"
+                >
                   <source :src="videoUrl" type="video/mp4" />
                 </video>
               </div>
             </div>
           </div>
+          <div class="w-full py-5 flex flex-wrap gap-5 justify-content-around">
+            <div class="flex flex-column w-fit">
+              <label for="fps" class="font-bold block mb-2">Frames per second</label>
+              <InputNumber
+                v-model="frameRate"
+                id="fps"
+                inputId="integeronly"
+                fluid
+                :showButtons="true"
+                :allowEmpty="false"
+                buttonLayout="horizontal"
+                :min="1"
+                :max="60"
+                class="w-fit"
+                @input="setFrameRate($event.value)"
+              >
+                <template #incrementbuttonicon>
+                  <span class="pi pi-plus" />
+                </template>
+                <template #decrementbuttonicon>
+                  <span class="pi pi-minus" />
+                </template>
+              </InputNumber>
+            </div>
+            <div class="flex flex-column w-fit">
+              <label for="resolution" class="font-bold block mb-2">Resolution</label>
+              <Select
+                id="resolution"
+                v-model="resolution"
+                :options="resolutionOptions"
+                optionLabel="name"
+                class="w-14rem md:w-56"
+                @change="setResolution($event.value)"
+              />
+            </div>
+          </div>
+          <TrimSlider v-model="timeRange" :duration="videoDuration" />
         </div>
       </template>
       <template #empty>
@@ -135,4 +197,9 @@ function formatSize(bytes: number): string {
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+:deep(.p-inputnumber-input) {
+  width: 4rem;
+  text-align: center;
+}
+</style>

@@ -1,11 +1,15 @@
 <script setup lang="ts">
 import Button from 'primevue/button'
 import axios from 'axios'
-import { onBeforeMount, ref, type Ref, watch } from 'vue'
+import { onBeforeMount, ref, type Ref } from 'vue'
 import Overlay from '@/components/Overlay.vue'
 import type { Image } from '@shared-types'
 import type { InputNumberInputEvent } from 'primevue/inputnumber'
+import { useFrameRate } from '@/composables/useFrameRate'
+import { useResolution } from '@/composables/useResolution'
 
+const { frameRate } = useFrameRate()
+const { resolution } = useResolution()
 const activeIndex = ref(0)
 const images: Ref<Image[]> = ref([])
 const isLoading = ref(false)
@@ -42,8 +46,8 @@ async function submit() {
 async function back() {
   isLoading.value = true
   try {
-    await axios.post('/frames')
-    await axios.post('/thumbnails')
+    await axios.post('/frames', { frameRate: frameRate.value, resolution: resolution.value.value })
+    await axios.post('/thumbnails', { frameRate: frameRate.value })
     emit('onBack')
   } catch (error) {
     console.error(error)
@@ -94,13 +98,14 @@ onBeforeMount(async () => {
           class="block w-full max-w-80rem"
           :style="isPreviewEnabled ? { opacity: `${image.item.opacity}%` } : {}"
         />
-        <div class="w-full p-5 filters">
-          <div class="flex-auto w-fit">
+        <div class="w-full p-5 flex flex-wrap gap-5 justify-content-around borders">
+          <div class="flex flex-column w-fit">
             <label for="opacity" class="font-bold block mb-2">Opacity</label>
             <InputNumber
               v-model="image.item.opacity"
               inputId="opacity"
               :showButtons="true"
+              :allowEmpty="false"
               buttonLayout="horizontal"
               :min="0"
               :max="100"
@@ -115,11 +120,11 @@ onBeforeMount(async () => {
               </template>
             </InputNumber>
           </div>
-          <div class="flex-auto w-fit">
+          <div class="flex flex-column w-fit">
             <label for="switch" class="font-bold block mb-2">Preview</label>
             <ToggleSwitch v-model="isPreviewEnabled" inputId="switch" />
           </div>
-          <div class="flex-auto w-fit">
+          <div class="flex flex-column w-fit">
             <label for="toggle" class="font-bold block mb-2">Adjust for all</label>
             <ToggleButton v-model="isSync" id="toggle" onLabel="Yes" offLabel="No" />
           </div>
@@ -157,10 +162,7 @@ onBeforeMount(async () => {
   text-align: center;
 }
 
-.filters {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  justify-items: center;
+.borders {
   border-bottom: var(--galleria-border-width) solid var(--galleria-border-color);
   border-top: var(--galleria-border-width) solid var(--galleria-border-color);
 }

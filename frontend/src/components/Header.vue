@@ -6,7 +6,10 @@ import ThemeSwitch from '@/components/ThemeSwitch.vue'
 <template>
   <div class="header">
     <i class="pi pi-home home-button" @click="router.go(0)"></i>
-    <span class="title">Frame Magic</span>
+    <div class="flex align-items-center gap-2 mr-5">
+      <img src="@/assets/magic-wand.png" alt="Logo" />
+      <span class="title">Frame Magic</span>
+    </div>
     <ThemeSwitch class="theme-switch" />
   </div>
 </template>
@@ -41,6 +44,10 @@ import ThemeSwitch from '@/components/ThemeSwitch.vue'
 .title {
   color: white;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 1.5rem;
+}
+
+img {
+  height: 1.5rem;
 }
 </style>

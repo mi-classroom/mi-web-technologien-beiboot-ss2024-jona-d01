@@ -1,5 +1,5 @@
 import express from 'express';
-import {extractFrames} from "./services/VideoService.ts";
+import { extractFrames, trimVideo } from './services/VideoService.ts'
 import {compressFrames} from "./services/ImageService.ts";
 import { createDirectory, deleteFiles } from './fileHelper.ts'
 import multer from 'multer';
@@ -8,7 +8,6 @@ import path from 'path'
 import type { Image } from '@shared-types'
 
 export const router = express.Router();
-const frameRate = 5;
 
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
@@ -29,8 +28,16 @@ router.post('/upload', uploadVideo.single('video'), (req, res) => {
 router.post('/frames', async (req, res) => {
     const inputPath = 'build/video/video.mov';
     const outputPath = 'build/frames';
-    const resolution = '1920x1080';
     const filePattern = '%03d'
+    const { frameRate, resolution } = req.body;
+
+    if (!frameRate || isNaN(frameRate) || frameRate < 1 || frameRate > 60) {
+        return res.status(400).send('FrameRate is required and must be a number between 1 and 60!')
+    }
+
+    if (!resolution) {
+        return res.status(400).send('Resolution is required!')
+    }
 
     try {
         await createDirectory(outputPath);
@@ -47,6 +54,12 @@ router.post('/thumbnails', async (req, res) => {
     const outputPath = 'build/thumbnails';
     const resolution = '1280x720';
     const filePattern = '%03d'
+    const { frameRate } = req.body;
+
+    if (!frameRate || isNaN(frameRate) || frameRate < 1 || frameRate > 60) {
+        return res.status(400).send('FrameRate is required and must be a number between 1 and 60!')
+    }
+
     try {
         await createDirectory(outputPath);
         await extractFrames(inputPath, outputPath, frameRate, resolution, filePattern);
@@ -56,7 +69,6 @@ router.post('/thumbnails', async (req, res) => {
         res.status(500).send('Internal server error');
     }
 });
-
 
 router.get('/thumbnails', async (req, res) => {
     try {
@@ -120,3 +132,27 @@ router.get('/output', async (req, res) => {
         res.sendStatus(500).send('Internal server error');
     }
 })
+
+router.post('/trimVideo', async (req, res) => {
+    const inputPath = 'build/video/video.mov';
+    const tempOutputPath = 'build/video/trimmed_video.mov';
+    const { startTime, endTime } = req.body;
+
+    if (typeof startTime !== 'number' || typeof endTime !== 'number' || startTime >= endTime) {
+        return res.status(400).send('Invalid startTime or endTime');
+    }
+
+    try {
+        await trimVideo(inputPath, tempOutputPath, startTime, endTime);
+        fs.rename(tempOutputPath, inputPath, (err) => {
+            if (err) {
+                console.error('Error renaming file:', err);
+                return res.status(500).send('Internal server error');
+            }
+            res.send('Video trimmed successfully.');
+        });
+    } catch (error) {
+        console.error('Error trimming video:', error);
+        res.status(500).send('Internal server error');
+    }
+});

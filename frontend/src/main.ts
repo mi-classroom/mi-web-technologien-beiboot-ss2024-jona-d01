@@ -13,6 +13,7 @@ import FileUpload from 'primevue/fileupload'
 import Galleria from 'primevue/galleria'
 import InputNumber from 'primevue/inputnumber'
 import ProgressSpinner from 'primevue/progressspinner'
+import Select from 'primevue/select'
 import SelectButton from 'primevue/selectbutton'
 import Skeleton from 'primevue/skeleton'
 import Slider from 'primevue/slider'
@@ -48,6 +49,7 @@ app.component('Button', Button)
 app.component('Badge', Badge)
 app.component('Galleria', Galleria)
 app.component('InputNumber', InputNumber)
+app.component('Select', Select)
 app.component('SelectButton', SelectButton)
 app.component('Skeleton', Skeleton)
 app.component('Slider', Slider)
