@@ -7,9 +7,9 @@ Dieses Projekt wird im Rahmen des Moduls „Web Technologien“ im Master-Studiu
 Ziel dieses Projekts ist es, eine Client-Server-Anwendung zu entwickeln, mit der ein Bild mit [Langzeitbelichtung](https://de.wikipedia.org/wiki/Langzeitbelichtung) auf einfache Art und Weise nachgestellt bzw. generiert werden kann.
 
 Warum ist das cool?\
-Bilder mit Langzeitbelichtung sind gar nicht so einfach zu erstellen, vor allem, wenn man möglichst viel Kontrolle über das Endergebnis haben möchte.\
+Bilder mit Langzeitbelichtung sind gar nicht so einfach zu erstellen, vor allem, wenn man möglichst viel Kontrolle über das Endergebnis haben möchte.
 
-Als Ausgangspunkt für die Erstellung des Bildes dient ein Video, welches zunächst in Einzelbilder zerlegt wird. Die einzelnen Bilder werden anschließend mit verschiedenen Blendmodes so übereinander gelegt, dass ein Bild mit Langzeitbelichtungseffekt entsteht.
+Als Ausgangspunkt für die Erstellung des Bildes dient ein Video, welches zunächst in Einzelbilder zerlegt wird. Die einzelnen Bilder werden anschließend mit einer ausgewählten Opazität so übereinander gelegt, dass ein Bild mit Langzeitbelichtungseffekt entsteht.
 
 ## Team
 Autor: [Jona Dielmann](https://github.com/jona-d01)\
@@ -28,6 +28,7 @@ Die Entscheidungen für die Verwendung der Technologien innerhalb dieses Projekt
 - [Bildbearbeitung](docs/decisions/imageEditingTools.md)
 - [Videobearbeitung](docs/decisions/videoEditingTools.md)
 
+Die Endpunkte sind in einer Swagger.json [hier](backend/docs/swagger.json) dokumentiert und erreichbar unter http://localhost:8000/api-docs/.
 
 ## Verwendung
 > Die lokale Ausführung dieses Projekts setzt die Installation von [Node.js](https://nodejs.org/en/download/prebuilt-installer) oder [Docker](https://www.docker.com/) voraus!
@@ -56,3 +57,15 @@ npm start
 ```
 
 Die Anwendung kann nach erfolgreicher Ausführung unter http://localhost:8000 im Browser aufgerufen werden.
+
+## Aufbau & Funktionsweise:
+
+![Architekturdiagramm](/docs/architecture.svg)
+
+Die gezeigte Grafik stellt eine formlose Darstellung der Anwendungsstruktur dar.
+
+Das Projekt besteht im Wesentlichen aus den folgenden 2 Modulen:
+
+* **frontend**: Dieses Modul beinhaltet eine Single Page Application, welche auf dem Vue.js-Framework basiert.
+
+* **backend**: Dieses Modul beinhaltet einen Node.js-Server und die Logik zur Verarbeitung und Verwaltung der Bilder und Videos für die Langzeitbelichtung.

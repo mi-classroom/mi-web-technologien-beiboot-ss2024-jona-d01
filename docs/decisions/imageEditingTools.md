@@ -1,8 +1,8 @@
 # Bildbearbeitung – Tools
 
-- Status: Accepted
-- Deciders: [Jona Dielmann](https://github.com/jona-d01)
-- Date: 2024-04-30
+- Status: Akzeptiert
+- Autor: [Jona Dielmann](https://github.com/jona-d01)
+- Datum: 30.04.2024
 
 ## Kontext
 
@@ -14,9 +14,9 @@ Ziel ist es, ein Tool zu finden, mit dem einzelne Bilder zusammengesetzt und bea
 
 ## Wichtige Aspekte
 
-- Dokumentation & Support
-- Open Source
-- Node.js kompatibel
+- Dokumentation & Support: <br> Wie gut ist die verfügbare Dokumentation und wie groß ist die Community bzw. der Support für die Technologie?
+- Open Source: <br> Stellt die Technologie sicher, dass sie Open-Source ist, um Lizenzkosten zu vermeiden und die Anpassbarkeit zu ermöglichen?
+- Node.js kompatibel: <br> Kann die Technologie in das bestehende Backend eingebunden werden?
 
 ## Optionen
 

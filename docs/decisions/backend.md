@@ -1,8 +1,8 @@
 # Backend – Technologien
 
 - Status: Akzeptiert
-- Deciders: [Jona Dielmann](https://github.com/jona-d01)
-- Date: 2024-04-30
+- Autor: [Jona Dielmann](https://github.com/jona-d01)
+- Datum: 30.04.2024
 
 ## Kontext
 
@@ -14,10 +14,10 @@ Ziel ist es, einen Webserver aufzusetzen.
 
 ## Wichtige Aspekte
 
-- Dokumentation & Support
-- Open Source
-- Skalierbarkeit
-- Performance
+- Dokumentation & Support: <br> Wie gut ist die verfügbare Dokumentation und wie groß ist die Community bzw. der Support für die Technologie?
+- Open Source: <br> Stellt die Technologie sicher, dass sie Open-Source ist, um Lizenzkosten zu vermeiden und die Anpassbarkeit zu ermöglichen?
+- Skalierbarkeit: <br> Wie gut skaliert die Technologie mit zunehmender Last und Nutzeranzahl?
+- Performance: <br> Liefert die Technologie eine zufriedenstellende Performance unter einer typischen Last?
 
 ## Optionen
 
@@ -27,7 +27,7 @@ Ziel ist es, einen Webserver aufzusetzen.
 
 ## Entscheidung
 
-Ich habe mich für das Framework „Express“ für Node.js entschieden, weil es einen einfachen Einstieg ins Backend für Frontendentwickler mit JavaScript & TypeScript bietet.
+Ich habe mich für das Framework „Express“ für Node.js entschieden, weil es einen einfachen Einstieg ins Backend für Frontendentwickler mit JavaScript & TypeScript bietet. Express ist leichtgewichtig und modular, was eine schnelle Entwicklung und einfache Wartbarkeit begünstigt.
 
 ## Erkenntnisse
 

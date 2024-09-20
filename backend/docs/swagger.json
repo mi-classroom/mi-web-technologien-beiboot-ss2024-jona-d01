@@ -1,75 +1,332 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "Meine API",
+    "title": "Frame Magic 🪄 – API",
     "version": "1.0.0"
   },
+  "servers": [
+    {
+      "url": "http://localhost:8000"
+    }
+  ],
   "paths": {
-    "/": {
-      "get": {
-        "summary": "Begrüßungsnachricht",
-        "responses": {
-          "200": {
-            "description": "Erfolgreiche Antwort",
-            "content": {
-              "text/plain": {
-                "example": "Hello World!"
+    "/upload": {
+      "post": {
+        "summary": "Upload video file",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "video": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
               }
             }
-          }
-        }
-      }
-    },
-    "/compressedFrames": {
-      "get": {
-        "tags": [
-          "video"
-        ],
-        "summary": "Komprimiere Frames",
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "Erfolgreiche Antwort",
+            "description": "Successfully uploaded the video"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": ["Video"]
+      }
+    },
+    "/frames": {
+      "post": {
+        "summary": "Extract frames from the uploaded video",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "frameRate": {
+                    "type": "integer",
+                    "description": "Frames per second",
+                    "minimum": 1,
+                    "maximum": 60
+                  },
+                  "resolution": {
+                    "type": "string",
+                    "description": "Resolution of the frames"
+                  }
+                },
+                "required": ["frameRate", "resolution"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Created Frames successfully."
+          },
+          "400": {
+            "description": "Invalid input parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": ["Frames"]
+      }
+    },
+    "/thumbnails": {
+      "post": {
+        "summary": "Extract thumbnails from the uploaded video",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "frameRate": {
+                    "type": "integer",
+                    "description": "Frames per second",
+                    "minimum": 1,
+                    "maximum": 60
+                  }
+                },
+                "required": ["frameRate"]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created thumbnails."
+          },
+          "400": {
+            "description": "Invalid input parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": ["Thumbnails"]
+      },
+      "get": {
+        "summary": "Get all thumbnails",
+        "responses": {
+          "200": {
+            "description": "List of thumbnails",
             "content": {
-              "text/plain": {
-                "example": "Komprimierung abgeschlossen!"
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "index": {
+                        "type": "integer"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "source": {
+                        "type": "string"
+                      },
+                      "selected": {
+                        "type": "boolean"
+                      },
+                      "showPreviewIcon": {
+                        "type": "boolean"
+                      },
+                      "showSkeleton": {
+                        "type": "boolean"
+                      },
+                      "opacity": {
+                        "type": "integer"
+                      }
+                    }
+                  }
+                }
               }
             }
           },
           "500": {
-            "description": "Interner Serverfehler",
-            "content": {
-              "text/plain": {
-                "example": "Interner Serverfehler"
-              }
-            }
+            "description": "Internal server error"
           }
-        }
+        },
+        "tags": ["Thumbnails"]
       }
     },
-    "/extractedFrames": {
-      "get": {
-        "tags": [
-          "image"
-        ],
-        "summary": "Extrahiere Frames aus Video",
+    "/filterImages": {
+      "put": {
+        "summary": "Filter images and delete unselected ones",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "index": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "source": {
+                          "type": "string"
+                        },
+                        "selected": {
+                          "type": "boolean"
+                        },
+                        "showPreviewIcon": {
+                          "type": "boolean"
+                        },
+                        "showSkeleton": {
+                          "type": "boolean"
+                        },
+                        "opacity": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
         "responses": {
           "200": {
-            "description": "Erfolgreiche Antwort",
+            "description": "Filtered images successfully."
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": ["All images"]
+      }
+    },
+    "/output": {
+      "post": {
+        "summary": "Create output image from frames",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "images": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "index": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "source": {
+                          "type": "string"
+                        },
+                        "selected": {
+                          "type": "boolean"
+                        },
+                        "showPreviewIcon": {
+                          "type": "boolean"
+                        },
+                        "showSkeleton": {
+                          "type": "boolean"
+                        },
+                        "opacity": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Created picture successfully."
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "tags": ["Output"]
+      },
+      "get": {
+        "summary": "Get the output image",
+        "responses": {
+          "200": {
+            "description": "Base64 encoded image",
             "content": {
-              "text/plain": {
-                "example": "Konvertierung abgeschlossen!"
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUA..."
+                }
               }
             }
           },
           "500": {
-            "description": "Interner Serverfehler",
-            "content": {
-              "text/plain": {
-                "example": "Interner Serverfehler"
+            "description": "Internal server error"
+          }
+        },
+        "tags": ["Output"]
+      }
+    },
+    "/trimVideo": {
+      "post": {
+        "summary": "Trim the uploaded video",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "startTime": {
+                    "type": "number",
+                    "description": "Start time in seconds"
+                  },
+                  "endTime": {
+                    "type": "number",
+                    "description": "End time in seconds"
+                  }
+                },
+                "required": ["startTime", "endTime"]
               }
             }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Video trimmed successfully."
+          },
+          "400": {
+            "description": "Invalid startTime or endTime"
+          },
+          "500": {
+            "description": "Internal server error"
           }
-        }
+        },
+        "tags": ["Video"]
       }
     }
   }

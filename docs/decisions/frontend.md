@@ -1,8 +1,8 @@
 # Frontend – Technologien
 
 - Status: Akzeptiert
-- Deciders: [Jona Dielmann](https://github.com/jona-d01)
-- Date: 2024-06-04
+- Autor: [Jona Dielmann](https://github.com/jona-d01)
+- Datum: 04.06.2024
 
 ## Kontext
 
@@ -14,10 +14,10 @@ Ziel ist es, eine Weboberfläche zu gestalten und die Funktionalitäten des Back
 
 ## Wichtige Aspekte
 
-- Dokumentation & Support
-- Open Source
-- Performance
-- Komponenten
+- Dokumentation & Support: <br> Wie gut ist die verfügbare Dokumentation und wie groß ist die Community bzw. der Support für die Technologie?
+- Open Source: <br> Stellt die Technologie sicher, dass sie Open-Source ist, um Lizenzkosten zu vermeiden und die Anpassbarkeit zu ermöglichen?
+- Performance: <br> Wie gut skaliert die Technologie mit zunehmender Last und Nutzeranzahl?
+- Komponenten: <br> Gibt es Bibliotheken die Komponenten für die Technologie bereitstellen?
 
 ## Optionen
 
@@ -28,6 +28,7 @@ Ziel ist es, eine Weboberfläche zu gestalten und die Funktionalitäten des Back
 ## Entscheidung
 
 Ich habe mich für das Framework „Vue.js“ entschieden, da dieses über eine ausführliche Dokumentation verfügt und ich bereits viel Erfahrung mit diesem Framework besitze.
+Zudem wird [PrimeVue](https://primevue.org/) als Component Library verwendet.
 
 ### Vorteile
 
