@@ -44,6 +44,7 @@ onBeforeMount(async () => {
     .get('/thumbnails')
     .then((result) => {
       images.value = result.data
+      lazyLoadImages()
     })
     .catch((error) => {
       console.error(error)
@@ -84,6 +85,22 @@ function imageClick(index: number) {
   displayCustom.value = true
 }
 
+function lazyLoadImages() {
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const img = entry.target as HTMLImageElement
+        img.src = img.dataset.src!
+        observer.unobserve(img)
+      }
+    })
+  })
+
+  document.querySelectorAll('img[data-src]').forEach((img) => {
+    observer.observe(img)
+  })
+}
+
 async function submit() {
   isLoading.value = true
   try {
@@ -121,7 +138,6 @@ async function submit() {
       <template #item="image">
         <div class="relative">
           <img
-            loading="lazy"
             :src="image.item.source"
             :alt="image.item.name"
             style="width: 100%; display: block"
@@ -150,7 +166,6 @@ async function submit() {
           <div class="relative">
             <Skeleton v-if="image.showSkeleton" width="200px" height="112.5px" class="skeleton" />
             <img
-              loading="lazy"
               :src="image.source"
               :alt="image.name"
               style="width: 200px; cursor: pointer"
