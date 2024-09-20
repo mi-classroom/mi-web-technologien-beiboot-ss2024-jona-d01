@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import Header from '@/components/Header.vue'
+import StepComponent from '@/components/StepIndicator.vue'
 </script>
 
 <template>
-  <!--      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>-->
-  <RouterView />
+  <Header />
+  <StepComponent />
 </template>
 
 <style scoped></style>

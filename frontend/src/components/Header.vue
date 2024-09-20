@@ -1,12 +1,10 @@
 <script setup lang="ts">
-import router from '@/router'
 import ThemeSwitch from '@/components/ThemeSwitch.vue'
 </script>
 
 <template>
   <div class="header">
-    <i class="pi pi-home home-button" @click="router.go(0)"></i>
-    <div class="flex align-items-center gap-2 mr-5">
+    <div class="logo-title">
       <img src="@/assets/magic-wand.png" alt="Logo" />
       <span class="title">Frame Magic</span>
     </div>
@@ -18,27 +16,27 @@ import ThemeSwitch from '@/components/ThemeSwitch.vue'
 .header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   color: white;
   background-color: var(--primary-color);
   height: 40px;
-  align-content: center;
-  padding: 10px;
+  padding: 5px;
   margin-bottom: 20px;
 }
 
-.home-button {
-  font-size: 20px;
-
-  &:hover {
-    color: black;
-    cursor: pointer;
-  }
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .theme-switch {
+  position: absolute;
+  right: 0;
   scale: 70%;
-  margin-left: -70px;
-  margin-right: -30px;
 }
 
 .title {
